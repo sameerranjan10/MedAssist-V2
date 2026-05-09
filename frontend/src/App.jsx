@@ -1,0 +1,90 @@
+/**
+ * App.jsx
+ * Root router — public routes (auth) + role-protected dashboard routes.
+ */
+import { Routes, Route, Navigate } from 'react-router-dom'
+import useAuthStore from '@/store/authStore'
+
+// Auth pages
+import LoginPage    from '@/pages/LoginPage'
+import RegisterPage from '@/pages/RegisterPage'
+
+// Layout
+import AppLayout from '@/components/Layout/AppLayout'
+
+// Patient pages
+import PatientDashboard  from '@/pages/patient/Dashboard'
+import MyReports         from '@/pages/patient/MyReports'
+import AIAnalysis        from '@/pages/patient/AIAnalysis'
+import ChatAssistant     from '@/pages/patient/ChatAssistant'
+import HealthTrends      from '@/pages/patient/HealthTrends'
+import Appointments      from '@/pages/patient/Appointments'
+
+// Doctor pages
+import DoctorDashboard   from '@/pages/doctor/DoctorDashboard'
+import PendingReports    from '@/pages/doctor/PendingReports'
+import ReportVerify      from '@/pages/doctor/ReportVerify'
+
+// Admin pages
+import AdminDashboard    from '@/pages/admin/AdminDashboard'
+import ManageUsers       from '@/pages/admin/ManageUsers'
+import ManageHospitals   from '@/pages/admin/ManageHospitals'
+
+/** Redirect unauthenticated users to /login */
+function PrivateRoute({ children, allowedRoles }) {
+  const { isAuthenticated, user } = useAuthStore()
+  if (!isAuthenticated) return <Navigate to="/login" replace />
+  if (allowedRoles && !allowedRoles.includes(user?.role)) {
+    return <Navigate to="/dashboard" replace />
+  }
+  return children
+}
+
+/** Redirect already-logged-in users away from auth pages */
+function PublicRoute({ children }) {
+  const { isAuthenticated, user } = useAuthStore()
+  if (isAuthenticated) {
+    const dest = user?.role === 'doctor' ? '/doctor' : user?.role === 'admin' ? '/admin' : '/dashboard'
+    return <Navigate to={dest} replace />
+  }
+  return children
+}
+
+export default function App() {
+  return (
+    <Routes>
+      {/* Public */}
+      <Route path="/login"    element={<PublicRoute><LoginPage /></PublicRoute>} />
+      <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
+
+      {/* Patient routes */}
+      <Route path="/" element={<PrivateRoute allowedRoles={['patient']}><AppLayout role="patient" /></PrivateRoute>}>
+        <Route index element={<Navigate to="/dashboard" replace />} />
+        <Route path="dashboard"    element={<PatientDashboard />} />
+        <Route path="reports"      element={<MyReports />} />
+        <Route path="analysis/:id" element={<AIAnalysis />} />
+        <Route path="analysis"     element={<AIAnalysis />} />
+        <Route path="chat"         element={<ChatAssistant />} />
+        <Route path="trends"       element={<HealthTrends />} />
+        <Route path="appointments" element={<Appointments />} />
+      </Route>
+
+      {/* Doctor routes */}
+      <Route path="/doctor" element={<PrivateRoute allowedRoles={['doctor']}><AppLayout role="doctor" /></PrivateRoute>}>
+        <Route index          element={<DoctorDashboard />} />
+        <Route path="pending" element={<PendingReports />} />
+        <Route path="verify/:id" element={<ReportVerify />} />
+      </Route>
+
+      {/* Admin routes */}
+      <Route path="/admin" element={<PrivateRoute allowedRoles={['admin']}><AppLayout role="admin" /></PrivateRoute>}>
+        <Route index               element={<AdminDashboard />} />
+        <Route path="users"        element={<ManageUsers />} />
+        <Route path="hospitals"    element={<ManageHospitals />} />
+      </Route>
+
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
+  )
+}
