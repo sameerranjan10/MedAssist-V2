@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   root: true,
   env: { browser: true, es2020: true },
   extends: [
@@ -6,7 +6,7 @@ export default {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', '.eslintrc.js'],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   plugins: ['react'],
   rules: {

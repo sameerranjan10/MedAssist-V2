@@ -8,6 +8,7 @@ import useAuthStore from '@/store/authStore'
 // Auth pages
 import LoginPage    from '@/pages/LoginPage'
 import RegisterPage from '@/pages/RegisterPage'
+import LandingPage  from '@/pages/LandingPage'
 
 // Layout
 import AppLayout from '@/components/Layout/AppLayout'
@@ -66,6 +67,7 @@ export default function App() {
   return (
     <Routes>
       {/* Public */}
+      <Route path="/landing"  element={<LandingPage />} />
       <Route path="/login"    element={<PublicRoute><LoginPage /></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
 
@@ -108,7 +110,7 @@ export default function App() {
       </Route>
 
       {/* Fallback */}
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<Navigate to="/landing" replace />} />
     </Routes>
   )
 }

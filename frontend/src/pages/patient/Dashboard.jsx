@@ -49,7 +49,7 @@ export default function PatientDashboard() {
           <h1 className="text-xl font-semibold text-slate-800">
             Welcome back, {user?.full_name?.split(' ')[0]}! 👋
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">Here's your health overview</p>
+          <p className="text-sm text-slate-500 mt-0.5">{"Here's your health overview"}</p>
         </div>
         <div className="flex items-center gap-2">
           <button className="w-9 h-9 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center relative shadow-card hover:shadow-card-hover transition-shadow">

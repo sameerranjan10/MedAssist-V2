@@ -1,6 +1,7 @@
 /**
  * pages/LoginPage.jsx
  * Animated login form — JWT auth → Zustand store → role-based redirect.
+ * Styled exactly like RegisterPage with a beautiful background image on the right.
  */
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -8,6 +9,7 @@ import { motion } from 'framer-motion'
 import { RiHeartPulseLine, RiMailLine, RiLockLine, RiEyeLine, RiEyeOffLine, RiLoader4Line } from 'react-icons/ri'
 import { authAPI } from '@/api/services'
 import useAuthStore from '@/store/authStore'
+import useThemeStore from '@/store/themeStore'
 import toast from 'react-hot-toast'
 
 export default function LoginPage() {
@@ -16,6 +18,7 @@ export default function LoginPage() {
   const [loading, setLoading]   = useState(false)
   const [error, setError]       = useState('')
   const { login } = useAuthStore()
+  const { theme } = useThemeStore()
   const navigate  = useNavigate()
 
   const handleChange = (e) => {
@@ -84,29 +87,38 @@ export default function LoginPage() {
         </div>
       </motion.div>
 
-      {/* Right — form */}
-      <div className="flex-1 flex items-center justify-center px-6">
+      {/* Right — form (with background image overlay) */}
+      <div
+        className="flex-1 flex items-center justify-center px-6 relative"
+        style={{
+          backgroundImage: theme === 'dark'
+            ? 'linear-gradient(rgba(3, 7, 18, 0.9), rgba(3, 7, 18, 0.9)), url(/doctor-patient-consult.jpg)'
+            : 'linear-gradient(rgba(245, 247, 251, 0.85), rgba(245, 247, 251, 0.85)), url(/doctor-patient-consult.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="w-full max-w-md"
+          className="w-full max-w-md bg-transparent"
         >
           {/* Mobile logo */}
           <div className="flex items-center gap-2 mb-8 lg:hidden">
             <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center">
               <RiHeartPulseLine className="text-white" />
             </div>
-            <span className="font-semibold text-slate-800">MedAssist</span>
+            <span className="font-semibold text-slate-800 dark:text-white">MedAssist</span>
           </div>
 
-          <h1 className="text-2xl font-bold text-slate-800 mb-1">Sign in</h1>
-          <p className="text-sm text-slate-500 mb-7">Welcome back — enter your details below</p>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-white mb-1">Sign in</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mb-7">Welcome back — enter your details below</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1.5">Email address</label>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1.5">Email address</label>
               <div className="relative">
                 <RiMailLine className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -120,7 +132,7 @@ export default function LoginPage() {
 
             {/* Password */}
             <div>
-              <label className="block text-xs font-medium text-slate-600 mb-1.5">Password</label>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1.5">Password</label>
               <div className="relative">
                 <RiLockLine className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
@@ -151,20 +163,14 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-6">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-brand font-medium hover:underline">
+          <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
+            {"Don't have an account? "}
+            <Link to="/register" className="text-brand dark:text-cyan-400 font-medium hover:underline">
               Create one
             </Link>
           </p>
 
-          {/* Demo credentials hint */}
-          <div className="mt-6 p-3 rounded-lg bg-slate-50 border border-slate-200">
-            <p className="text-xs font-medium text-slate-600 mb-1">Demo credentials</p>
-            <p className="text-xs text-slate-500">Patient: patient@demo.com / demo1234</p>
-            <p className="text-xs text-slate-500">Doctor: doctor@demo.com / demo1234</p>
-            <p className="text-xs text-slate-500">Admin: admin@demo.com / demo1234</p>
-          </div>
+
         </motion.div>
       </div>
     </div>

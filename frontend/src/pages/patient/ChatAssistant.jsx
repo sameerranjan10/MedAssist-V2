@@ -161,7 +161,7 @@ export default function ChatAssistant() {
                   <RiRobot2Line className="text-brand text-2xl" />
                 </div>
                 <p className="text-sm font-medium text-slate-600">Ask me anything about your report</p>
-                <p className="text-xs text-slate-400 mt-1">I'll explain your results in simple language</p>
+                <p className="text-xs text-slate-400 mt-1">{"I'll explain your results in simple language"}</p>
               </div>
             ) : (
               <AnimatePresence initial={false}>
