@@ -10,9 +10,10 @@ import {
   RiStethoscopeLine, RiHospitalLine, RiUserLine,
   RiSettingsLine, RiLogoutBoxLine, RiHeartPulseLine,
   RiShieldCheckLine, RiTeamLine, RiBuilding2Line,
-  RiFileTextLine,RiVerifiedBadgeLine,
+  RiFileTextLine,RiVerifiedBadgeLine, RiSunLine, RiMoonLine
 } from 'react-icons/ri'
 import useAuthStore from '@/store/authStore'
+import useThemeStore from '@/store/themeStore'
 import toast from 'react-hot-toast'
 
 const NAV_ITEMS = {
@@ -55,6 +56,7 @@ const PORTAL_LABELS = {
 
 export default function Sidebar({ role }) {
   const { user, logout, getInitials } = useAuthStore()
+  const { theme, toggleTheme } = useThemeStore() // Vite trigger reload
   const navigate = useNavigate()
   const items = NAV_ITEMS[role] || NAV_ITEMS.patient
 
@@ -127,10 +129,16 @@ export default function Sidebar({ role }) {
             <p className="text-white text-[12px] font-medium truncate">{user?.full_name}</p>
             <p className="text-white/50 text-[11px] capitalize">{role}</p>
           </div>
-          <button onClick={handleLogout} title="Logout"
-            className="text-white/40 hover:text-white/80 transition-colors">
-            <RiLogoutBoxLine className="text-base" />
-          </button>
+          <div className="flex flex-col gap-1 items-center">
+            <button onClick={toggleTheme} title="Toggle Theme"
+              className="text-white/40 hover:text-white/80 transition-colors">
+              {theme === 'dark' ? <RiSunLine className="text-sm" /> : <RiMoonLine className="text-sm" />}
+            </button>
+            <button onClick={handleLogout} title="Logout"
+              className="text-white/40 hover:text-white/80 transition-colors">
+              <RiLogoutBoxLine className="text-sm" />
+            </button>
+          </div>
         </div>
       </div>
     </motion.aside>

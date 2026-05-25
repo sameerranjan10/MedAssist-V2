@@ -5,6 +5,8 @@
 import { motion } from 'framer-motion'
 import { RiLoader4Line, RiInboxLine } from 'react-icons/ri'
 
+export { default as FloatingChat } from './FloatingChat'
+
 // ── Stat Card ─────────────────────────────────────────────────────────────────
 export function StatCard({ label, value, sub, icon: Icon, iconColor = 'text-brand', trend }) {
   return (

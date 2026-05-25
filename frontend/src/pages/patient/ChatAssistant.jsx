@@ -39,7 +39,7 @@ function ChatBubble({ msg, initials }) {
       <div className={`max-w-[75%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${
         isUser
           ? 'bg-brand text-white rounded-br-sm'
-          : 'bg-white border border-slate-200 text-slate-700 rounded-bl-sm shadow-card'
+          : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-bl-sm shadow-card'
       }`}>
         {msg.message || msg.content}
       </div>
@@ -179,7 +179,7 @@ export default function ChatAssistant() {
               <div className="w-7 h-7 rounded-full bg-primary-50 text-brand border border-primary-100 flex items-center justify-center flex-shrink-0">
                 <RiRobot2Line className="text-sm" />
               </div>
-              <div className="bg-white border border-slate-200 rounded-2xl rounded-bl-sm px-4 py-3 shadow-card">
+              <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-sm px-4 py-3 shadow-card">
                 <div className="flex gap-1">
                   {[0, 1, 2].map(i => (
                     <div key={i} className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce"
@@ -194,7 +194,7 @@ export default function ChatAssistant() {
         </div>
 
         {/* Quick chips */}
-        <div className="px-4 pb-2 flex gap-2 flex-wrap border-t border-slate-50 pt-2">
+        <div className="px-4 pb-2 flex gap-2 flex-wrap border-t border-slate-50 dark:border-slate-800 pt-2">
           {QUICK_CHIPS.map(chip => (
             <button key={chip} onClick={() => send(chip)}
               className="bg-primary-50 text-brand border border-primary-200 rounded-full px-2.5 py-1 text-xs font-medium hover:bg-brand hover:text-white transition-colors">
@@ -204,7 +204,7 @@ export default function ChatAssistant() {
         </div>
 
         {/* Input */}
-        <div className="p-3 border-t border-slate-100 flex gap-2">
+        <div className="p-3 border-t border-slate-100 dark:border-slate-800 flex gap-2">
           <input
             value={input}
             onChange={e => setInput(e.target.value)}

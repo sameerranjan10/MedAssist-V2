@@ -6,7 +6,7 @@
   * { box-sizing: border-box; }
   body {
     font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
-    @apply bg-slate-50 text-slate-800 antialiased;
+    @apply bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 antialiased transition-colors duration-200;
   }
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { @apply bg-transparent; }
@@ -27,10 +27,10 @@
 
   /* Cards */
   .card {
-    @apply bg-white rounded-xl border border-slate-200 shadow-card p-4;
+    @apply bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-card p-4 text-slate-800 dark:text-slate-200;
   }
   .card-hover {
-    @apply hover:shadow-card-hover hover:border-primary-200 transition-shadow;
+    @apply hover:shadow-card-hover hover:border-primary-200 dark:hover:border-primary-500 transition-shadow;
   }
 
   /* Buttons */
@@ -39,8 +39,8 @@
            hover:bg-primary-700 active:scale-[0.98] transition-all;
   }
   .btn-secondary {
-    @apply bg-white text-slate-700 border border-slate-200 px-4 py-2
-           rounded-lg text-sm font-medium hover:bg-slate-50 transition-all;
+    @apply bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600 px-4 py-2
+           rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all;
   }
   .btn-danger {
     @apply bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium
@@ -53,31 +53,94 @@
 
   /* Status badges */
   .badge { @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium; }
-  .badge-low      { @apply badge bg-red-100 text-red-700; }
-  .badge-high     { @apply badge bg-orange-100 text-orange-700; }
-  .badge-normal   { @apply badge bg-emerald-100 text-emerald-700; }
-  .badge-critical { @apply badge bg-red-200 text-red-800; }
-  .badge-pending  { @apply badge bg-blue-100 text-blue-700; }
-  .badge-verified { @apply badge bg-emerald-100 text-emerald-700; }
-  .badge-rejected { @apply badge bg-red-100 text-red-700; }
-  .badge-processing { @apply badge bg-amber-100 text-amber-700; }
+  .badge-low      { @apply badge bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400; }
+  .badge-high     { @apply badge bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400; }
+  .badge-normal   { @apply badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400; }
+  .badge-critical { @apply badge bg-red-200 text-red-800 dark:bg-red-900/50 dark:text-red-300; }
+  .badge-pending  { @apply badge bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400; }
+  .badge-verified { @apply badge bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400; }
+  .badge-rejected { @apply badge bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400; }
+  .badge-processing { @apply badge bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400; }
 
   /* Input fields */
   .input {
-    @apply w-full border border-slate-200 rounded-lg px-3 py-2 text-sm
-           focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-brand
-           bg-white placeholder-slate-400 transition-all;
+    @apply w-full border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2 text-sm
+           focus:outline-none focus:ring-2 focus:ring-primary-200 dark:focus:ring-brand focus:border-brand
+           bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 placeholder-slate-400 transition-all;
   }
 
   /* Table */
-  .data-table { @apply w-full text-sm; }
+  .data-table { @apply w-full text-sm text-slate-800 dark:text-slate-300; }
   .data-table th {
-    @apply text-left text-xs font-medium text-slate-500 px-3 py-2
-           border-b border-slate-100 uppercase tracking-wide;
+    @apply text-left text-xs font-medium text-slate-500 dark:text-slate-400 px-3 py-2
+           border-b border-slate-100 dark:border-slate-700 uppercase tracking-wide;
   }
-  .data-table td { @apply px-3 py-2.5 border-b border-slate-50; }
+  .data-table td { @apply px-3 py-2.5 border-b border-slate-50 dark:border-slate-700/50; }
   .data-table tr:last-child td { @apply border-b-0; }
-  .data-table tr:hover td { @apply bg-slate-50/50; }
+  .data-table tr:hover td { @apply bg-slate-50/50 dark:bg-slate-800/50; }
+}
+
+@layer utilities {
+  /* Text mappings */
+  .dark .text-slate-800 { @apply text-slate-200 !important; }
+  .dark .text-slate-700 { @apply text-slate-300 !important; }
+  .dark .text-slate-600 { @apply text-slate-300 !important; }
+  .dark .text-slate-500 { @apply text-slate-400 !important; }
+  
+  /* Background and border mappings */
+  .dark .bg-slate-50 { @apply bg-slate-900 !important; }
+  .dark .bg-white { @apply bg-slate-800 !important; }
+  
+  .dark .border-slate-50 { @apply border-slate-800 !important; }
+  .dark .border-slate-100 { @apply border-slate-700 !important; }
+  .dark .border-slate-200 { @apply border-slate-700 !important; }
+
+  /* Brand/Primary Highlight Colors */
+  .dark .bg-primary-50 { @apply bg-brand/20 !important; }
+  .dark .bg-primary-100 { @apply bg-brand/30 !important; }
+  .dark .border-primary-100 { @apply border-brand/30 !important; }
+  .dark .border-primary-200 { @apply border-brand/40 !important; }
+
+  /* Badge and Status Colors */
+  .dark .bg-red-50 { @apply bg-red-900/30 !important; }
+  .dark .bg-red-100 { @apply bg-red-900/40 !important; }
+  .dark .border-red-100 { @apply border-red-900/50 !important; }
+  .dark .border-red-200 { @apply border-red-900/50 !important; }
+  .dark .text-red-600 { @apply text-red-400 !important; }
+  .dark .text-red-700 { @apply text-red-400 !important; }
+  .dark .text-red-800 { @apply text-red-300 !important; }
+
+  .dark .bg-emerald-50 { @apply bg-emerald-900/30 !important; }
+  .dark .bg-emerald-100 { @apply bg-emerald-900/40 !important; }
+  .dark .border-emerald-200 { @apply border-emerald-900/50 !important; }
+  .dark .text-emerald-700 { @apply text-emerald-400 !important; }
+  .dark .text-emerald-600 { @apply text-emerald-400 !important; }
+
+  .dark .bg-amber-100 { @apply bg-amber-900/30 !important; }
+  .dark .text-amber-700 { @apply text-amber-400 !important; }
+  
+  .dark .bg-blue-100 { @apply bg-blue-900/30 !important; }
+  .dark .text-blue-700 { @apply text-blue-400 !important; }
+  
+  .dark .bg-orange-100 { @apply bg-orange-900/30 !important; }
+  .dark .text-orange-700 { @apply text-orange-400 !important; }
+
+  /* Recharts Overrides for Dark Mode */
+  .dark .recharts-default-tooltip {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+  }
+  .dark .recharts-tooltip-item {
+    color: #e2e8f0 !important;
+  }
+  .dark .recharts-cartesian-grid-horizontal line,
+  .dark .recharts-cartesian-grid-vertical line {
+    stroke: #334155 !important;
+  }
+  .dark .recharts-text {
+    fill: #94a3b8 !important;
+  }
 }
 
 /* Animations */

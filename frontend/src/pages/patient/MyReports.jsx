@@ -76,8 +76,8 @@ export default function MyReports() {
         {...getRootProps()}
         className={`rounded-xl border-2 border-dashed p-8 flex flex-col items-center justify-center cursor-pointer mb-6 transition-all ${
           isDragActive
-            ? 'border-brand bg-primary-50'
-            : 'border-slate-200 bg-slate-50 hover:border-brand hover:bg-primary-50/50'
+            ? 'border-brand bg-primary-50 dark:bg-brand/20'
+            : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:border-brand dark:hover:border-brand hover:bg-primary-50/50 dark:hover:bg-brand/10'
         } ${uploading ? 'opacity-60 pointer-events-none' : ''}`}
       >
         <input {...getInputProps()} />
@@ -125,7 +125,7 @@ export default function MyReports() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.04 }}
-                className="flex items-center gap-3 py-3 border-b border-slate-50 last:border-0 group"
+                className="flex items-center gap-3 py-3 border-b border-slate-50 dark:border-slate-800 last:border-0 group"
               >
                 <div className="w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center flex-shrink-0">
                   <RiFileList3Line className="text-brand text-base" />

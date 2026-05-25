@@ -80,7 +80,7 @@ export default function AIAnalysis() {
       </div>
 
       {/* Report info bar */}
-      <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200 mb-5">
+      <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 mb-5">
         <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
           <RiFileTextLine className="text-red-500 text-base" />
         </div>
@@ -188,7 +188,7 @@ export default function AIAnalysis() {
             </div>
 
             {/* AI recommendation */}
-            <div className="mt-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex gap-2.5">
+            <div className="mt-4 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 flex gap-2.5">
               <RiLightbulbLine className="text-emerald-600 text-base flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-xs font-semibold text-emerald-700 mb-1">AI Recommendation</p>

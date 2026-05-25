@@ -96,7 +96,7 @@ export default function PendingReports() {
         {/* Left — Patient list */}
         <div className="card flex flex-col overflow-hidden">
           {/* Search */}
-          <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 mb-3">
+          <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 mb-3">
             <RiSearchLine className="text-slate-400 flex-shrink-0" />
             <input value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search by patient or report…"
@@ -115,8 +115,8 @@ export default function PendingReports() {
                     onClick={() => selectReport(r)}
                     className={`p-3 rounded-xl border cursor-pointer transition-all ${
                       selected?.id === r.id
-                        ? 'border-brand bg-primary-50'
-                        : 'border-slate-200 hover:border-slate-300'
+                        ? 'border-brand bg-primary-50 dark:bg-brand/20'
+                        : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
                     }`}
                   >
                     <div className="flex items-start justify-between">
@@ -145,7 +145,7 @@ export default function PendingReports() {
           ) : detail ? (
             <div className="flex flex-col gap-4 overflow-y-auto">
               {/* Report header */}
-              <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+              <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
                 <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
                   <RiFileTextLine className="text-red-500" />
                 </div>
@@ -160,7 +160,7 @@ export default function PendingReports() {
               </div>
 
               {/* Tabs */}
-              <div className="border-b border-slate-100">
+              <div className="border-b border-slate-100 dark:border-slate-700">
                 <div className="flex">
                   {['AI Analysis', 'Patient Info'].map((t, i) => (
                     <button key={t}
@@ -210,7 +210,7 @@ export default function PendingReports() {
               </div>
 
               {/* Action buttons */}
-              <div className="flex gap-2 mt-auto pt-2 border-t border-slate-100">
+              <div className="flex gap-2 mt-auto pt-2 border-t border-slate-100 dark:border-slate-700">
                 <button onClick={() => verify('needs_info')} disabled={submitting}
                   className="btn-secondary flex items-center gap-1.5 flex-1 justify-center">
                   <RiInformationLine /> Request Info

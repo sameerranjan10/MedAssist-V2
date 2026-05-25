@@ -52,7 +52,7 @@ export default function PatientDashboard() {
           <p className="text-sm text-slate-500 mt-0.5">Here's your health overview</p>
         </div>
         <div className="flex items-center gap-2">
-          <button className="w-9 h-9 rounded-lg bg-white border border-slate-200 flex items-center justify-center relative shadow-card hover:shadow-card-hover transition-shadow">
+          <button className="w-9 h-9 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center relative shadow-card hover:shadow-card-hover transition-shadow">
             <RiCalendarLine className="text-slate-500" />
             <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-red-500 rounded-full border border-white" />
           </button>
@@ -87,19 +87,19 @@ export default function PatientDashboard() {
           </div>
           {latest ? (
             <>
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 mb-3">
-                <div className="w-9 h-9 rounded-lg bg-primary-50 flex items-center justify-center flex-shrink-0">
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 mb-3">
+                <div className="w-9 h-9 rounded-lg bg-primary-50 dark:bg-brand/20 flex items-center justify-center flex-shrink-0">
                   <RiFileList3Line className="text-brand text-base" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-slate-700 truncate">{latest.file_name}</p>
+                  <p className="text-sm font-medium text-slate-700 dark:text-slate-200 truncate">{latest.file_name}</p>
                   <p className="text-xs text-slate-400">
                     {new Date(latest.uploaded_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </p>
                 </div>
                 <StatusBadge status={latest.status} />
               </div>
-              <div className="flex items-center justify-center h-16 rounded-lg bg-slate-50 mb-3 text-slate-400 text-xs gap-2">
+              <div className="flex items-center justify-center h-16 rounded-lg bg-slate-50 dark:bg-slate-800/50 mb-3 text-slate-400 text-xs gap-2">
                 <RiFileList3Line className="text-brand text-xl" /> Report Preview
               </div>
               <button onClick={() => navigate(`/analysis/${latest.id}`)}
@@ -120,7 +120,7 @@ export default function PatientDashboard() {
               <select 
                 value={selectedTrendIdx}
                 onChange={(e) => setSelectedTrendIdx(Number(e.target.value))}
-                className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white text-slate-600 focus:outline-none focus:ring-1 focus:ring-brand">
+                className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-brand">
                 {stats.health_trends.map((t, idx) => (
                   <option key={t.parameter_name} value={idx}>{t.parameter_name}</option>
                 ))}
@@ -165,13 +165,12 @@ export default function PatientDashboard() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex items-start gap-4 rounded-xl p-4 border border-indigo-100"
-          style={{ background: 'linear-gradient(135deg,#eef1ff 0%,#f0fdf4 100%)' }}
+          className="flex items-start gap-4 rounded-xl p-4 border border-indigo-100 dark:border-slate-700 bg-gradient-to-br from-[#eef1ff] to-[#f0fdf4] dark:from-[#18243b] dark:to-[#18243b]"
         >
           <div className="text-3xl flex-shrink-0">🥗</div>
           <div>
-            <p className="text-xs font-semibold text-brand mb-1">AI Health Tip for You</p>
-            <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+            <p className="text-xs font-semibold text-brand dark:text-white mb-1">AI Health Tip for You</p>
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
               {stats?.ai_tip || "Upload your first report to receive personalized health tips."}
             </p>
           </div>
@@ -187,7 +186,7 @@ export default function PatientDashboard() {
               { icon: RiMessage2Line,     label: 'Chat with AI Assistant', to: '/chat' },
             ].map(a => (
               <button key={a.label} onClick={() => navigate(a.to)}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border border-slate-200 hover:border-brand hover:bg-primary-50 transition-all group text-sm font-medium text-slate-700">
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-brand dark:hover:border-brand hover:bg-primary-50 dark:hover:bg-brand/10 transition-all group text-sm font-medium text-slate-700 dark:text-slate-200">
                 <a.icon className="text-brand text-base" />
                 {a.label}
                 <RiArrowRightLine className="ml-auto text-slate-300 group-hover:text-brand transition-colors" />
