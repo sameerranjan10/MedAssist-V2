@@ -1,6 +1,12 @@
 # MedAssist — Complete Setup & Deployment Guide
 
-> AI-powered medical report intelligence platform  
+Overview
+
+MedAssist is an AI-powered medical report intelligence platform designed to simplify the way users interact with healthcare reports and medical data. Instead of manually reading lengthy diagnostic documents filled with medical terminology, MedAssist helps users upload reports, analyze them using artificial intelligence, and receive simplified insights in a clean and interactive interface.
+
+The project combines modern web technologies with machine learning and natural language processing to create a smart healthcare assistant capable of understanding medical reports, extracting important health information, and helping users gain better clarity about their health conditions.
+
+This project was built with the goal of making healthcare information more accessible, understandable, and interactive for everyday users.
 > Stack: React + Vite + FastAPI + PostgreSQL + Groq/Llama3 + LangChain + FAISS
 
 ---
@@ -217,75 +223,6 @@ npx vercel --prod
 1. Create project at neon.tech
 2. Copy connection string
 3. Set as `DATABASE_URL` in Render environment variables
-
----
-
-## API Routes Reference
-
-### Auth
-| Method | Route | Description |
-|---|---|---|
-| POST | `/api/auth/register` | Create account |
-| POST | `/api/auth/login` | Get JWT token |
-| GET  | `/api/auth/me` | Current user info |
-
-### Reports (Patient)
-| Method | Route | Description |
-|---|---|---|
-| POST | `/api/reports/upload` | Upload PDF/image |
-| GET  | `/api/reports/` | List my reports |
-| GET  | `/api/reports/{id}` | Report detail |
-| GET  | `/api/reports/{id}/analysis` | AI analysis result |
-| DELETE | `/api/reports/{id}` | Delete report |
-
-### Chatbot
-| Method | Route | Description |
-|---|---|---|
-| POST | `/api/chatbot/ask` | Ask question about report |
-| GET  | `/api/chatbot/{id}/history` | Chat history |
-| DELETE | `/api/chatbot/{id}/history` | Clear chat |
-
-### Doctor
-| Method | Route | Description |
-|---|---|---|
-| GET  | `/api/doctor/pending-reports` | All pending verifications |
-| GET  | `/api/doctor/reports/{id}` | Full report detail |
-| POST | `/api/doctor/verify` | Submit verification decision |
-| GET  | `/api/doctor/stats` | Doctor dashboard stats |
-
-### Admin
-| Method | Route | Description |
-|---|---|---|
-| GET  | `/api/admin/stats` | Platform-wide analytics |
-| GET  | `/api/admin/users` | List all users |
-| PATCH | `/api/admin/users/{id}/toggle-active` | Enable/disable user |
-| PATCH | `/api/admin/doctors/{id}/verify-license` | Verify doctor |
-| GET/POST/DELETE | `/api/admin/hospitals` | Hospital CRUD |
-
----
-
-## Demo Accounts
-
-Seed these users in your DB for testing:
-
-```python
-# Run in Python shell after starting backend
-from app.core.database import SessionLocal
-from app.models.models import User, Patient, Doctor
-from app.core.security import hash_password
-
-db = SessionLocal()
-users = [
-    User(email="patient@demo.com", full_name="Rohan Sharma",
-         hashed_password=hash_password("demo1234"), role="patient"),
-    User(email="doctor@demo.com",  full_name="Dr. Ananya Verma",
-         hashed_password=hash_password("demo1234"), role="doctor"),
-    User(email="admin@demo.com",   full_name="Dr. Vivek Rao",
-         hashed_password=hash_password("demo1234"), role="admin"),
-]
-db.add_all(users)
-db.commit()
-```
 
 ---
 
