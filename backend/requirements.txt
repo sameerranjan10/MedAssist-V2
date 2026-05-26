@@ -21,7 +21,10 @@ langchain==0.1.20
 langchain-groq==0.1.5
 langchain-community==0.0.38
 faiss-cpu==1.8.0
-sentence-transformers==3.0.0
+
+sentence-transformers==2.7.0
+transformers==4.41.2
+torch==2.2.2
 
 # OCR & File Processing
 pytesseract==0.3.10
