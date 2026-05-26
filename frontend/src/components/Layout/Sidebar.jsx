@@ -10,7 +10,8 @@ import {
   RiStethoscopeLine, RiHospitalLine, RiUserLine,
   RiSettingsLine, RiLogoutBoxLine, RiHeartPulseLine,
   RiShieldCheckLine, RiTeamLine, RiBuilding2Line,
-  RiFileTextLine,RiVerifiedBadgeLine, RiSunLine, RiMoonLine
+  RiFileTextLine,RiVerifiedBadgeLine, RiSunLine, RiMoonLine,
+  RiCloseLine
 } from 'react-icons/ri'
 import useAuthStore from '@/store/authStore'
 import useThemeStore from '@/store/themeStore'
@@ -55,7 +56,7 @@ const PORTAL_LABELS = {
   admin: 'Hospital Admin',
 }
 
-export default function Sidebar({ role }) {
+export default function Sidebar({ role, isOpen, onClose }) {
   const { user, logout, getInitials } = useAuthStore()
   const { theme, toggleTheme } = useThemeStore() // Vite trigger reload
   const navigate = useNavigate()
@@ -68,19 +69,26 @@ export default function Sidebar({ role }) {
   }
 
   return (
-    <motion.aside
-      initial={{ x: -220 }}
-      animate={{ x: 0 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
-      className="w-[190px] flex-shrink-0 flex flex-col overflow-y-auto"
-      style={{ background: '#14114a' }}
+    <aside
+      className={`fixed md:static top-0 left-0 h-full w-[190px] z-50 flex-shrink-0 flex flex-col overflow-y-auto transition-transform duration-300 bg-[#14114a] ${
+        isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      }`}
     >
       {/* Logo */}
-      <div className="flex items-center gap-2.5 px-4 py-4">
-        <MedAssistIcon size={32} uid="sidebar" />
-        <span className="text-white font-semibold text-[15px]">
-          {PORTAL_LABELS[role] ?? 'MedAssist'}
-        </span>
+      <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
+        <div className="flex items-center gap-2.5">
+          <MedAssistIcon size={32} uid="sidebar" />
+          <span className="text-white font-semibold text-[15px]">
+            {PORTAL_LABELS[role] ?? 'MedAssist'}
+          </span>
+        </div>
+        <button 
+          onClick={onClose}
+          className="md:hidden p-1 rounded-lg text-white/60 hover:text-white transition-colors"
+          aria-label="Close menu"
+        >
+          <RiCloseLine className="text-xl" />
+        </button>
       </div>
 
       {/* Nav */}
@@ -90,6 +98,7 @@ export default function Sidebar({ role }) {
             key={item.to}
             to={item.to}
             end={item.to === '/doctor' || item.to === '/admin'}
+            onClick={onClose}
             className={({ isActive }) =>
               `nav-link ${isActive ? 'active' : ''}`
             }
@@ -140,6 +149,6 @@ export default function Sidebar({ role }) {
           </div>
         </div>
       </div>
-    </motion.aside>
+    </aside>
   )
 }
