@@ -50,7 +50,7 @@ export default function ManageHospitals() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <PageHeader
         title="Manage Hospitals"
         subtitle="Add and manage hospital partnerships"
@@ -93,31 +93,33 @@ export default function ManageHospitals() {
           <EmptyState title="No hospitals added yet" icon={RiBuildingLine}
             action={<button onClick={() => setShowForm(true)} className="btn-primary">Add First Hospital</button>} />
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr><th>Name</th><th>City</th><th>Phone</th><th>Status</th><th></th></tr>
-            </thead>
-            <tbody>
-              {hospitals.map(h => (
-                <tr key={h.id}>
-                  <td className="font-medium">{h.name}</td>
-                  <td className="text-slate-500">{h.city || '—'}</td>
-                  <td className="text-slate-500">{h.phone || '—'}</td>
-                  <td>
-                    <span className={h.is_active ? 'badge-normal' : 'badge-low'}>
-                      {h.is_active ? 'Active' : 'Inactive'}
-                    </span>
-                  </td>
-                  <td>
-                    <button onClick={() => handleDelete(h.id)}
-                      className="p-1.5 rounded hover:bg-red-50 text-red-400 transition-colors">
-                      <RiDeleteBinLine />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto w-full">
+            <table className="data-table">
+              <thead>
+                <tr><th>Name</th><th>City</th><th>Phone</th><th>Status</th><th></th></tr>
+              </thead>
+              <tbody>
+                {hospitals.map(h => (
+                  <tr key={h.id}>
+                    <td className="font-medium">{h.name}</td>
+                    <td className="text-slate-500">{h.city || '—'}</td>
+                    <td className="text-slate-500">{h.phone || '—'}</td>
+                    <td>
+                      <span className={h.is_active ? 'badge-normal' : 'badge-low'}>
+                        {h.is_active ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    <td>
+                      <button onClick={() => handleDelete(h.id)}
+                        className="p-1.5 rounded hover:bg-red-50 text-red-400 transition-colors">
+                        <RiDeleteBinLine />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </Card>
     </div>

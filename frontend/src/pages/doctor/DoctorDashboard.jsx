@@ -25,7 +25,7 @@ export default function DoctorDashboard() {
   if (loading) return <div className="p-6"><LoadingSpinner fullPage /></div>
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <div className="mb-6">
         <h1 className="text-xl font-semibold text-slate-800">
           Welcome, {user?.full_name} 👨‍⚕️
@@ -35,7 +35,7 @@ export default function DoctorDashboard() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
         <StatCard label="Pending Reports"  value={stats?.pending_reports || 0}
           icon={RiFileTextLine} iconColor="text-amber-500"
           sub={<span className="text-amber-600 font-medium">Awaiting review</span>} />

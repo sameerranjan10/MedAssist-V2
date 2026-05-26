@@ -64,7 +64,7 @@ export default function AIAnalysis() {
   ]
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
@@ -80,7 +80,7 @@ export default function AIAnalysis() {
       </div>
 
       {/* Report info bar */}
-      <div className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 mb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 mb-5">
         <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
           <RiFileTextLine className="text-red-500 text-base" />
         </div>
@@ -91,16 +91,16 @@ export default function AIAnalysis() {
             {report?.file_size_kb && ` • ${(report.file_size_kb / 1024).toFixed(1)} MB`}
           </p>
         </div>
-        <div className="flex items-center gap-1.5 bg-emerald-100 text-emerald-700 text-xs font-medium px-2.5 py-1 rounded-full">
+        <div className="flex items-center gap-1.5 bg-emerald-100 text-emerald-700 text-xs font-medium px-2.5 py-1 rounded-full self-start sm:self-auto">
           <RiCheckboxCircleLine /> Analysis Completed
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-0 border-b border-slate-200 mb-5">
+      <div className="flex gap-2 border-b border-slate-200 mb-5 overflow-x-auto whitespace-nowrap scrollbar-none">
         {TABS.map((t, i) => (
           <button key={t} onClick={() => setActiveTab(i)}
-            className={`px-4 py-2 text-sm border-b-2 transition-colors ${
+            className={`px-4 py-2 text-sm border-b-2 transition-colors flex-shrink-0 ${
               activeTab === i
                 ? 'border-brand text-brand font-semibold'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
@@ -138,23 +138,25 @@ export default function AIAnalysis() {
 
             {/* Key params preview (top 5) */}
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Key Parameters</h3>
-            <table className="data-table">
-              <thead>
-                <tr><th>Parameter</th><th>Your Value</th><th>Normal Range</th><th>Status</th></tr>
-              </thead>
-              <tbody>
-                {paramList.slice(0, 5).map(p => (
-                  <tr key={p.label}>
-                    <td className="font-medium text-slate-700">{p.label}</td>
-                    <td className={p.status === 'normal' ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'}>
-                      {p.value} {p.unit}
-                    </td>
-                    <td className="text-slate-400">{p.normal_range}</td>
-                    <td><StatusBadge status={p.status} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="overflow-x-auto w-full">
+              <table className="data-table">
+                <thead>
+                  <tr><th>Parameter</th><th>Your Value</th><th>Normal Range</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                  {paramList.slice(0, 5).map(p => (
+                    <tr key={p.label}>
+                      <td className="font-medium text-slate-700">{p.label}</td>
+                      <td className={p.status === 'normal' ? 'text-emerald-600 font-semibold' : 'text-red-600 font-semibold'}>
+                        {p.value} {p.unit}
+                      </td>
+                      <td className="text-slate-400">{p.normal_range}</td>
+                      <td><StatusBadge status={p.status} /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* Donut chart */}
@@ -202,26 +204,28 @@ export default function AIAnalysis() {
       {/* Tab: Parameters */}
       {activeTab === 1 && (
         <div className="card">
-          <table className="data-table">
-            <thead>
-              <tr><th>Parameter</th><th>Your Value</th><th>Unit</th><th>Normal Range</th><th>Status</th></tr>
-            </thead>
-            <tbody>
-              {paramList.length === 0 ? (
-                <tr><td colSpan={5} className="text-center text-slate-400 py-8">No parameters extracted</td></tr>
-              ) : paramList.map(p => (
-                <tr key={p.label}>
-                  <td className="font-medium">{p.label}</td>
-                  <td className={`font-semibold ${p.status === 'normal' ? 'text-emerald-600' : 'text-red-600'}`}>
-                    {p.value}
-                  </td>
-                  <td className="text-slate-400">{p.unit}</td>
-                  <td className="text-slate-400">{p.normal_range}</td>
-                  <td><StatusBadge status={p.status} /></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto w-full">
+            <table className="data-table">
+              <thead>
+                <tr><th>Parameter</th><th>Your Value</th><th>Unit</th><th>Normal Range</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                {paramList.length === 0 ? (
+                  <tr><td colSpan={5} className="text-center text-slate-400 py-8">No parameters extracted</td></tr>
+                ) : paramList.map(p => (
+                  <tr key={p.label}>
+                    <td className="font-medium">{p.label}</td>
+                    <td className={`font-semibold ${p.status === 'normal' ? 'text-emerald-600' : 'text-red-600'}`}>
+                      {p.value}
+                    </td>
+                    <td className="text-slate-400">{p.unit}</td>
+                    <td className="text-slate-400">{p.normal_range}</td>
+                    <td><StatusBadge status={p.status} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

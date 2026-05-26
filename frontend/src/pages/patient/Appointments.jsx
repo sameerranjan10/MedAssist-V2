@@ -23,7 +23,7 @@ export default function Appointments() {
   const [showBook, setShowBook] = useState(false)
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <PageHeader
         title="Appointments"
         subtitle="Manage your upcoming and past consultations"
@@ -55,32 +55,38 @@ export default function Appointments() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.07 }}
           >
-            <Card className="flex items-center gap-4">
-              {/* Date block */}
-              <div className="text-center w-10 flex-shrink-0">
-                <p className="text-2xl font-bold text-brand leading-none">{appt.day}</p>
-                <p className="text-[10px] text-slate-400 uppercase tracking-wide">{appt.month}</p>
-              </div>
+            <Card className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                {/* Date block */}
+                <div className="text-center w-10 flex-shrink-0">
+                  <p className="text-2xl font-bold text-brand leading-none">{appt.day}</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-wide">{appt.month}</p>
+                </div>
 
-              {/* Doctor avatar */}
-              <Avatar name={appt.doctor} size={10} color={appt.color} />
+                <div className="w-[1px] h-8 bg-slate-100 dark:bg-slate-700 self-center hidden sm:block" />
 
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-slate-700">{appt.doctor}</p>
-                <p className="text-xs text-slate-500">{appt.spec}</p>
-                <div className="flex items-center gap-3 mt-1">
-                  <span className="flex items-center gap-1 text-xs text-slate-400">
-                    <RiTimeLine className="text-slate-400" /> {appt.time}
-                  </span>
-                  <span className="flex items-center gap-1 text-xs text-slate-400">
-                    <RiHospitalLine className="text-slate-400" /> {appt.hospital}
-                  </span>
+                {/* Doctor avatar */}
+                <Avatar name={appt.doctor} size={10} color={appt.color} />
+
+                {/* Info */}
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-slate-700 dark:text-white">{appt.doctor}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{appt.spec}</p>
                 </div>
               </div>
 
+              {/* Consultation detail tags */}
+              <div className="flex flex-wrap items-center gap-3 sm:flex-1 min-w-0">
+                <span className="flex items-center gap-1 text-xs text-slate-400">
+                  <RiTimeLine className="text-slate-400" /> {appt.time}
+                </span>
+                <span className="flex items-center gap-1 text-xs text-slate-400">
+                  <RiHospitalLine className="text-slate-400" /> {appt.hospital}
+                </span>
+              </div>
+
               {/* Status + Join */}
-              <div className="flex flex-col items-end gap-2">
+              <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-2 w-full sm:w-auto pt-2.5 sm:pt-0 border-t border-slate-100 dark:border-slate-800 sm:border-0">
                 <span className="badge-pending text-[11px]">{appt.status}</span>
                 <button className="flex items-center gap-1.5 bg-brand text-white text-xs font-medium px-3 py-1.5 rounded-lg hover:bg-primary-700 transition-colors">
                   <RiVideoLine /> Join Video

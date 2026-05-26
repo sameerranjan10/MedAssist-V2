@@ -58,15 +58,15 @@ export function StatusBadge({ status, label }) {
 // ── Page Header ───────────────────────────────────────────────────────────────
 export function PageHeader({ title, subtitle, actions, emoji }) {
   return (
-    <div className="flex items-start justify-between mb-5">
+    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-5">
       <div>
-        <h1 className="text-xl font-semibold text-slate-800">
+        <h1 className="text-xl font-semibold text-slate-800 dark:text-white">
           {emoji && <span className="mr-2">{emoji}</span>}
           {title}
         </h1>
-        {subtitle && <p className="text-sm text-slate-500 mt-0.5">{subtitle}</p>}
+        {subtitle && <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
       </div>
-      {actions && <div className="flex items-center gap-2">{actions}</div>}
+      {actions && <div className="flex items-center gap-2 w-full sm:w-auto justify-start sm:justify-end">{actions}</div>}
     </div>
   )
 }

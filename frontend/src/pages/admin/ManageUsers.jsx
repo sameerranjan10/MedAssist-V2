@@ -44,7 +44,7 @@ export default function ManageUsers() {
   )
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <PageHeader title="Manage Users" subtitle="All registered users across the platform" />
 
       <div className="flex gap-3 mb-4">
@@ -67,45 +67,47 @@ export default function ManageUsers() {
         {loading ? <LoadingSpinner /> : filtered.length === 0 ? (
           <EmptyState title="No users found" subtitle="Try adjusting your filter." />
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Name</th><th>Email</th><th>Role</th>
-                <th>Status</th><th>Joined</th><th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map(u => (
-                <tr key={u.id}>
-                  <td className="font-medium">{u.full_name}</td>
-                  <td className="text-slate-500">{u.email}</td>
-                  <td><span className="badge badge-pending capitalize">{u.role}</span></td>
-                  <td>
-                    <span className={u.is_active ? 'badge-normal' : 'badge-low'}>
-                      {u.is_active ? 'Active' : 'Disabled'}
-                    </span>
-                  </td>
-                  <td className="text-slate-400 text-xs">
-                    {new Date(u.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                  </td>
-                  <td>
-                    <div className="flex items-center gap-1">
-                      <button onClick={() => toggleActive(u.id)} title="Toggle active"
-                        className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors">
-                        <RiToggleLine className="text-base" />
-                      </button>
-                      {u.role === 'doctor' && (
-                        <button onClick={() => verifyLicense(u.id)} title="Verify doctor license"
-                          className="p-1.5 rounded-lg hover:bg-emerald-50 text-emerald-500 transition-colors">
-                          <RiShieldCheckLine className="text-base" />
-                        </button>
-                      )}
-                    </div>
-                  </td>
+          <div className="overflow-x-auto w-full">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th><th>Email</th><th>Role</th>
+                  <th>Status</th><th>Joined</th><th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map(u => (
+                  <tr key={u.id}>
+                    <td className="font-medium">{u.full_name}</td>
+                    <td className="text-slate-500">{u.email}</td>
+                    <td><span className="badge badge-pending capitalize">{u.role}</span></td>
+                    <td>
+                      <span className={u.is_active ? 'badge-normal' : 'badge-low'}>
+                        {u.is_active ? 'Active' : 'Disabled'}
+                      </span>
+                    </td>
+                    <td className="text-slate-400 text-xs">
+                      {new Date(u.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </td>
+                    <td>
+                      <div className="flex items-center gap-1">
+                        <button onClick={() => toggleActive(u.id)} title="Toggle active"
+                          className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition-colors">
+                          <RiToggleLine className="text-base" />
+                        </button>
+                        {u.role === 'doctor' && (
+                          <button onClick={() => verifyLicense(u.id)} title="Verify doctor license"
+                            className="p-1.5 rounded-lg hover:bg-emerald-50 text-emerald-500 transition-colors">
+                            <RiShieldCheckLine className="text-base" />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

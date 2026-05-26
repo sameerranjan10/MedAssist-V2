@@ -36,7 +36,7 @@ function ChatBubble({ msg, initials }) {
       }`}>
         {isUser ? initials : <RiRobot2Line />}
       </div>
-      <div className={`max-w-[75%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${
+      <div className={`max-w-[85%] md:max-w-[75%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${
         isUser
           ? 'bg-brand text-white rounded-br-sm'
           : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-bl-sm shadow-card'
@@ -120,7 +120,7 @@ export default function ChatAssistant() {
   }
 
   return (
-    <div className="p-6 flex flex-col h-full" style={{ maxHeight: 'calc(100vh - 0px)' }}>
+    <div className="p-4 md:p-6 flex flex-col h-full" style={{ maxHeight: 'calc(100vh - 60px)' }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -194,10 +194,10 @@ export default function ChatAssistant() {
         </div>
 
         {/* Quick chips */}
-        <div className="px-4 pb-2 flex gap-2 flex-wrap border-t border-slate-50 dark:border-slate-800 pt-2">
+        <div className="px-4 pb-2 flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-none border-t border-slate-50 dark:border-slate-800 pt-2">
           {QUICK_CHIPS.map(chip => (
             <button key={chip} onClick={() => send(chip)}
-              className="bg-primary-50 text-brand border border-primary-200 rounded-full px-2.5 py-1 text-xs font-medium hover:bg-brand hover:text-white transition-colors">
+              className="bg-primary-50 text-brand border border-primary-200 rounded-full px-2.5 py-1 text-xs font-medium hover:bg-brand hover:text-white transition-colors flex-shrink-0">
               {chip}
             </button>
           ))}

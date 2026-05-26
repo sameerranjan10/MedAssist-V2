@@ -78,7 +78,7 @@ export default function PatientProfile() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-4 md:p-6 max-w-4xl mx-auto">
       <PageHeader title="My Profile" subtitle="Manage your personal health profile and credentials" />
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">

@@ -57,7 +57,7 @@ export default function AdminDashboard() {
   ]
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <div className="mb-5 flex items-start justify-between">
         <div>
           <h1 className="text-xl font-semibold text-slate-800">Hospital Admin</h1>

@@ -22,7 +22,7 @@ export default function ManageReports() {
   )
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <PageHeader title="Platform Reports" subtitle="View all medical reports on the platform" />
       <div className="flex gap-3 mb-4">
         <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2 flex-1 max-w-sm">
@@ -35,29 +35,31 @@ export default function ManageReports() {
         {loading ? <LoadingSpinner /> : filtered.length === 0 ? (
           <EmptyState title="No reports found" icon={RiFileList3Line} subtitle="No reports match your search." />
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Title</th><th>Patient</th><th>Status</th><th>Uploaded At</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map(r => (
-                <tr key={r.id}>
-                  <td className="font-medium">{r.title || 'Untitled Report'}</td>
-                  <td className="text-slate-500">{r.patient_name || `Patient #${r.patient_id}`}</td>
-                  <td>
-                    <span className={r.status === 'verified' ? 'badge-normal' : r.status === 'pending' ? 'badge-pending' : 'badge-low'}>
-                      {r.status || 'Pending'}
-                    </span>
-                  </td>
-                  <td className="text-slate-400 text-xs">
-                    {new Date(r.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                  </td>
+          <div className="overflow-x-auto w-full">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Title</th><th>Patient</th><th>Status</th><th>Uploaded At</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map(r => (
+                  <tr key={r.id}>
+                    <td className="font-medium">{r.title || 'Untitled Report'}</td>
+                    <td className="text-slate-500">{r.patient_name || `Patient #${r.patient_id}`}</td>
+                    <td>
+                      <span className={r.status === 'verified' ? 'badge-normal' : r.status === 'pending' ? 'badge-pending' : 'badge-low'}>
+                        {r.status || 'Pending'}
+                      </span>
+                    </td>
+                    <td className="text-slate-400 text-xs">
+                      {new Date(r.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </Card>
     </div>

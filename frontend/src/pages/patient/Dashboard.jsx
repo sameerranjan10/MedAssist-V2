@@ -42,7 +42,7 @@ export default function PatientDashboard() {
   const activeTrend = hasTrends ? stats.health_trends[selectedTrendIdx] : null
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       {/* Top bar */}
       <div className="flex items-center justify-between mb-6">
         <div>

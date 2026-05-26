@@ -31,8 +31,9 @@ export default {
         brand: '#4f6ef7',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        sora: ['Sora', 'sans-serif'],
+        sans: ['Manrope', 'system-ui', 'sans-serif'],
+        sora: ['Cabinet Grotesk', 'sans-serif'],
+        display: ['Cabinet Grotesk', 'sans-serif'],
       },
       boxShadow: {
         card: '0 4px 20px -2px rgba(0,0,0,0.05), 0 0 3px rgba(0,0,0,0.02)',

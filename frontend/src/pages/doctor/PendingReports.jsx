@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import {
   RiSearchLine, RiCheckLine, RiCloseLine,
   RiInformationLine, RiFileTextLine, RiUserLine,
+  RiArrowLeftLine,
 } from 'react-icons/ri'
 import { doctorAPI } from '@/api/services'
 import { StatusBadge, LoadingSpinner, EmptyState } from '@/components/common'
@@ -85,7 +86,7 @@ export default function PendingReports() {
     : []
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <div className="mb-4">
         <h1 className="text-xl font-semibold text-slate-800">Pending Report Verification</h1>
         <p className="text-sm text-slate-500 mt-0.5">{reports.length} reports awaiting your review</p>
@@ -94,7 +95,7 @@ export default function PendingReports() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4" style={{ minHeight: '70vh' }}>
 
         {/* Left — Patient list */}
-        <div className="card flex flex-col overflow-hidden">
+        <div className={`card flex flex-col overflow-hidden ${selected ? 'hidden lg:flex' : 'flex'}`}>
           {/* Search */}
           <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 mb-3">
             <RiSearchLine className="text-slate-400 flex-shrink-0" />
@@ -137,13 +138,21 @@ export default function PendingReports() {
         </div>
 
         {/* Right — Report detail + verify form */}
-        <div className="card flex flex-col">
+        <div className={`card flex flex-col ${selected ? 'flex' : 'hidden lg:flex'}`}>
           {!selected ? (
             <EmptyState title="Select a report" subtitle="Click a patient from the list to review" icon={RiUserLine} />
           ) : detailLoading ? (
             <LoadingSpinner text="Loading report…" />
           ) : detail ? (
             <div className="flex flex-col gap-4 overflow-y-auto">
+              {/* Mobile Back Button */}
+              <button
+                onClick={() => { setSelected(null); setDetail(null); }}
+                className="lg:hidden flex items-center gap-1.5 text-xs text-brand font-medium pb-2 border-b border-slate-100 dark:border-slate-800"
+              >
+                <RiArrowLeftLine /> Back to Patients
+              </button>
+
               {/* Report header */}
               <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
                 <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">

@@ -76,7 +76,7 @@ export default function DoctorProfile() {
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-4 md:p-6 max-w-4xl mx-auto">
       <PageHeader title="Doctor Profile" subtitle="Manage your professional information and credentials" />
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">

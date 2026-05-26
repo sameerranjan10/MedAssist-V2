@@ -161,7 +161,7 @@ export default function RegisterPage() {
                     }`}>
                     <div className="text-lg mb-1">{r.emoji}</div>
                     <div className="text-xs font-medium text-slate-700 dark:text-slate-200">{r.label}</div>
-                    <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">{r.desc}</div>
+                    <div className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 hidden sm:block">{r.desc}</div>
                   </button>
                 ))}
               </div>

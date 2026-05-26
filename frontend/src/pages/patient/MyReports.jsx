@@ -65,7 +65,7 @@ export default function MyReports() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6">
       <PageHeader
         title="My Reports"
         subtitle="Upload and manage your medical reports"
@@ -138,7 +138,7 @@ export default function MyReports() {
                   </p>
                 </div>
                 <StatusBadge status={r.status} />
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center gap-1 md:opacity-0 md:group-hover:opacity-100 opacity-100 transition-opacity">
                   {r.status !== 'uploaded' && r.status !== 'processing' && (
                     <button onClick={() => navigate(`/analysis/${r.id}`)}
                       title="View analysis"
