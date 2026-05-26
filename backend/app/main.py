@@ -34,19 +34,16 @@ def create_app() -> FastAPI:
 
     # CORS — allow frontend origin
     app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:3000",
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+        CORSMiddleware,
+        allow_origins=settings.allowed_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     # Routers
     app.include_router(auth.router)
+    app.include_router(auth.google_router, prefix="/auth")
     app.include_router(reports.router)
     app.include_router(chatbot.router)
     app.include_router(doctor.router)

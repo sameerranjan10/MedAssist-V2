@@ -10,6 +10,9 @@ export const authAPI = {
   login:    (data)  => api.post('/api/auth/login', data),
   me:       ()      => api.get('/api/auth/me'),
   logout:   ()      => api.post('/api/auth/logout'),
+  google:   (data)  => api.post('/auth/google', data),
+  getProfile: ()    => api.get('/api/auth/profile'),
+  updateProfile:(d) => api.put('/api/auth/profile', d),
 }
 
 // ── Dashboard ─────────────────────────────────────────────────────────────────

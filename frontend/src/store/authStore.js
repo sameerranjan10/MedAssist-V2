@@ -20,6 +20,7 @@ const useAuthStore = create(
             id: tokenData.user_id,
             full_name: tokenData.full_name,
             role: tokenData.role,
+            email: tokenData.email,
           },
           isAuthenticated: true,
         })
@@ -27,6 +28,12 @@ const useAuthStore = create(
 
       logout: () => {
         set({ token: null, user: null, isAuthenticated: false })
+      },
+
+      updateUser: (userData) => {
+        set((state) => ({
+          user: state.user ? { ...state.user, ...userData } : null
+        }))
       },
 
       getRole: () => get().user?.role ?? null,

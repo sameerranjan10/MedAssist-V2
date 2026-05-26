@@ -15,6 +15,7 @@ import {
 import useAuthStore from '@/store/authStore'
 import useThemeStore from '@/store/themeStore'
 import toast from 'react-hot-toast'
+import MedAssistIcon from '@/components/MedAssistIcon'
 
 const NAV_ITEMS = {
   patient: [
@@ -76,9 +77,7 @@ export default function Sidebar({ role }) {
     >
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-4 py-4">
-        <div className="w-8 h-8 bg-brand rounded-lg flex items-center justify-center flex-shrink-0">
-          <RiHeartPulseLine className="text-white text-lg" />
-        </div>
+        <MedAssistIcon size={32} uid="sidebar" />
         <span className="text-white font-semibold text-[15px]">
           {PORTAL_LABELS[role] ?? 'MedAssist'}
         </span>

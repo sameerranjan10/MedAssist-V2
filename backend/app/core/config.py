@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
 
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = "834417550803-mcstcq4fns1o0glch0kut6l6ol4sjlck.apps.googleusercontent.com"
+
     # Groq AI
     GROQ_API_KEY: str
     GROQ_MODEL: str = "llama-3.3-70b-versatile"
@@ -30,10 +33,11 @@ class Settings(BaseSettings):
 
     # CORS
     FRONTEND_URL: str = "http://localhost:5173"
+    FRONTEND_URLS: str = "http://localhost:5173,http://127.0.0.1:5173"
 
     @property
     def allowed_origins(self) -> List[str]:
-        return [self.FRONTEND_URL, "http://localhost:3000"]
+        return self.FRONTEND_URLS.split(",")
 
     class Config:
         env_file = ".env"
