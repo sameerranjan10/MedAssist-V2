@@ -67,22 +67,21 @@ export default function App() {
   return (
     <Routes>
       {/* Public */}
-      <Route path="/landing"  element={<LandingPage />} />
+      <Route path="/"         element={<LandingPage />} />
       <Route path="/login"    element={<PublicRoute><LoginPage /></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
 
       {/* Patient routes */}
-      <Route path="/" element={<PrivateRoute allowedRoles={['patient']}><AppLayout role="patient" /></PrivateRoute>}>
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard"    element={<PatientDashboard />} />
-        <Route path="reports"      element={<MyReports />} />
-        <Route path="analysis/:id" element={<AIAnalysis />} />
-        <Route path="analysis"     element={<AIAnalysis />} />
-        <Route path="chat"         element={<ChatAssistant />} />
-        <Route path="trends"       element={<HealthTrends />} />
-        <Route path="appointments" element={<Appointments />} />
-        <Route path="profile"      element={<PatientProfile />} />
-        <Route path="settings"     element={<PatientSettings />} />
+      <Route element={<PrivateRoute allowedRoles={['patient']}><AppLayout role="patient" /></PrivateRoute>}>
+        <Route path="/dashboard"    element={<PatientDashboard />} />
+        <Route path="/reports"      element={<MyReports />} />
+        <Route path="/analysis/:id" element={<AIAnalysis />} />
+        <Route path="/analysis"     element={<AIAnalysis />} />
+        <Route path="/chat"         element={<ChatAssistant />} />
+        <Route path="/trends"       element={<HealthTrends />} />
+        <Route path="/appointments" element={<Appointments />} />
+        <Route path="/profile"      element={<PatientProfile />} />
+        <Route path="/settings"     element={<PatientSettings />} />
       </Route>
 
       {/* Doctor routes */}
@@ -110,7 +109,7 @@ export default function App() {
       </Route>
 
       {/* Fallback */}
-      <Route path="*" element={<Navigate to="/landing" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }

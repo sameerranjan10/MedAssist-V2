@@ -1,11 +1,11 @@
 /**
  * pages/LandingPage.jsx
  * MedAssist — Premium futuristic healthcare landing page.
- * Light + Dark mode. Layered depth. Floating UI elements. Premium SaaS feel.
+ * Editorial SaaS feel. Dark layered surfaces. Subtle glow.
  */
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import {
   RiRobot2Line, RiFileSearchLine, RiScanLine, RiLineChartLine,
   RiChat3Line, RiTeamLine, RiDashboardLine, RiArrowRightLine,
@@ -15,66 +15,74 @@ import {
   RiUserLine, RiMicroscopeLine, RiArrowDownLine, RiSunLine, RiMoonLine,
 } from 'react-icons/ri'
 import useThemeStore from '@/store/themeStore'
-import HealthcareIllo from '@/components/HealthcareIllo'
+import MedAssistIcon from '@/components/MedAssistIcon'
+
+
+/* ═══════════════════════════════════════════
+   ANIMATION VARIANTS
+   ═══════════════════════════════════════════ */
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+}
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } }
+}
+
+const fadeLeft = {
+  hidden: { opacity: 0, x: -30 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } }
+}
+
 
 /* ═══════════════════════════════════════════
    REUSABLE COMPONENTS
    ═══════════════════════════════════════════ */
 
-/* ── Glass Card ── */
-function GlassCard({ children, className = '', delay = 0, hover = true }) {
+/* ── Premium Card ── */
+function PremiumCard({ children, className = '', hover = true }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
-      whileHover={hover ? { y: -5, scale: 1.015 } : {}}
-      className={`relative group rounded-2xl border transition-all duration-500
-        border-slate-200/60 dark:border-white/[0.08]
-        bg-white/70 dark:bg-white/[0.03]
-        backdrop-blur-sm dark:backdrop-blur-xl
-        shadow-[0_2px_20px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]
-        hover:shadow-[0_8px_40px_rgba(79,110,247,0.1)] dark:hover:shadow-[0_8px_40px_rgba(34,211,238,0.06)]
-        hover:border-brand/30 dark:hover:border-cyan-400/20
+      whileHover={hover ? { y: -6, scale: 1.01 } : {}}
+      className={`relative group rounded-[24px] border transition-all duration-500
+        border-slate-200/80 dark:border-white/10
+        bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl
+        shadow-card dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]
+        hover:shadow-card-hover dark:hover:shadow-[0_8px_40px_rgba(34,211,238,0.2)]
+        hover:border-brand/30 dark:hover:border-cyan-400/30
+        overflow-hidden
         ${className}`}
     >
-      {/* Hover glow border (dark mode) */}
-      <div className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none
-        hidden dark:block"
-        style={{
-          background: 'linear-gradient(135deg, rgba(34,211,238,0.15), transparent, rgba(129,140,248,0.1))',
-          mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-          maskComposite: 'exclude', WebkitMaskComposite: 'xor', padding: '1px',
-        }}
-      />
-      <div className="relative z-10">{children}</div>
+      <div className="absolute inset-0 bg-gradient-to-br from-brand/5 dark:from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      <div className="relative z-10 h-full">{children}</div>
     </motion.div>
   )
 }
 
 /* ── Section Header ── */
-function SectionHeader({ tag, title, desc }) {
+function SectionHeader({ tag, title, desc, align = 'center' }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.6 }}
-      className="text-center mb-16 max-w-3xl mx-auto"
+      className={`mb-16 md:mb-20 ${align === 'center' ? 'text-center mx-auto max-w-3xl' : 'text-left max-w-2xl'}`}
     >
       {tag && (
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium tracking-wide
-          bg-brand/10 text-brand border border-brand/20 dark:bg-cyan-500/10 dark:text-cyan-400 dark:border-cyan-500/20 mb-5">
+        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase
+          bg-brand/10 text-brand border border-brand/20 dark:bg-cyan-500/10 dark:text-cyan-400 dark:border-cyan-500/30 mb-6 
+          shadow-sm dark:shadow-[0_0_15px_rgba(34,211,238,0.2)]">
           <span className="w-1.5 h-1.5 rounded-full bg-brand dark:bg-cyan-400 animate-pulse" />
           {tag}
         </span>
       )}
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight mb-4"
-        style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+      <h2 className="font-sora text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-[1.2] tracking-tight mb-5 dark:drop-shadow-sm">
         {title}
       </h2>
-      {desc && <p className="text-slate-500 dark:text-slate-400 text-base md:text-lg leading-relaxed">{desc}</p>}
+      {desc && <p className="text-slate-500 dark:text-slate-300 text-base md:text-lg leading-relaxed">{desc}</p>}
     </motion.div>
   )
 }
@@ -112,7 +120,7 @@ function AnimCounter({ end, suffix = '', duration = 2 }) {
 /* ── Mini Chart ── */
 function MiniChart({ color = '#4f6ef7', bars = 7 }) {
   return (
-    <div className="flex items-end gap-1 h-10">
+    <div className="flex items-end gap-1.5 h-10">
       {Array.from({ length: bars }).map((_, i) => (
         <motion.div key={i}
           initial={{ height: 4 }}
@@ -120,13 +128,12 @@ function MiniChart({ color = '#4f6ef7', bars = 7 }) {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: i * 0.08 }}
           className="w-1.5 rounded-full"
-          style={{ background: `linear-gradient(to top, ${color}40, ${color})` }}
+          style={{ background: `linear-gradient(to top, ${color}30, ${color})` }}
         />
       ))}
     </div>
   )
 }
-
 
 /* ── Report Scan Demo ── */
 function ReportScanDemo() {
@@ -149,36 +156,48 @@ function ReportScanDemo() {
   ]
 
   return (
-    <div className="relative rounded-xl border overflow-hidden
-      border-slate-200/60 dark:border-white/[0.08]
-      bg-white/80 dark:bg-[#0a0f1e]/80 backdrop-blur-sm
-      shadow-lg shadow-black/5 dark:shadow-black/30 p-5">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8 }}
+      className="relative rounded-[24px] border overflow-hidden
+      border-slate-200/80 dark:border-white/10
+      bg-white/90 dark:bg-white/[0.03] backdrop-blur-3xl
+      shadow-card dark:shadow-[0_20px_60px_rgba(0,0,0,0.6)] p-6 md:p-8">
+      
+      {/* Scanning Laser */}
       {phase >= 1 && phase < 3 && (
-        <motion.div animate={{ y: [0, 300] }}
+        <motion.div animate={{ y: [0, 360] }}
           transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-          className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-brand dark:via-cyan-400 to-transparent z-20" />
+          className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-brand dark:via-cyan-400 to-transparent shadow-[0_0_10px_rgba(79,110,247,0.5)] dark:shadow-[0_0_20px_rgba(34,211,238,0.8)] z-20" />
       )}
-      <div className="flex items-center gap-2 mb-4">
-        <RiFileSearchLine className="text-brand dark:text-cyan-400" />
-        <span className="text-xs font-medium text-slate-600 dark:text-white/70">Blood_Report_2025.pdf</span>
-        <span className={`ml-auto text-[10px] px-2 py-0.5 rounded-full font-medium ${
-          phase >= 3 ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-brand/10 dark:bg-cyan-500/20 text-brand dark:text-cyan-400'
-        }`}>
-          {phase < 1 ? 'Uploading…' : phase < 3 ? 'AI Scanning…' : 'Analysis Complete'}
-        </span>
+      
+      <div className="flex items-center gap-4 mb-6 border-b border-slate-100 dark:border-white/5 pb-5">
+        <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-white/[0.05] flex items-center justify-center shadow-inner border border-slate-200/50 dark:border-white/10">
+          <RiFileSearchLine className="text-brand dark:text-cyan-400 text-2xl dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+        </div>
+        <div>
+          <h5 className="text-base font-semibold text-slate-800 dark:text-white tracking-wide">Blood_Report_2025.pdf</h5>
+          <span className={`text-[11px] uppercase tracking-wider font-bold ${
+            phase >= 3 ? 'text-emerald-500 dark:text-emerald-400' : 'text-brand dark:text-cyan-400 animate-pulse'
+          }`}>
+            {phase < 1 ? 'Uploading…' : phase < 3 ? 'Scanning Document…' : 'Analysis Complete'}
+          </span>
+        </div>
       </div>
-      <div className="space-y-1.5">
+      <div className="space-y-3">
         {rows.map((row, i) => (
           <motion.div key={row.label}
             initial={{ opacity: 0, x: -10 }}
             animate={phase >= 2 ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: i * 0.12 }}
-            className="flex items-center justify-between text-xs py-1.5 px-2 rounded-lg bg-slate-50/80 dark:bg-white/[0.02]">
-            <span className="text-slate-500 dark:text-slate-400">{row.label}</span>
-            <div className="flex items-center gap-2">
-              <span className="text-slate-800 dark:text-white/90 font-mono">{row.value}</span>
-              <span className={`w-1.5 h-1.5 rounded-full ${
-                row.status === 'normal' ? 'bg-emerald-400' : row.status === 'high' ? 'bg-amber-400' : 'bg-red-400 animate-pulse'
+            className="flex items-center justify-between text-sm py-3 px-4 rounded-xl bg-slate-50/80 dark:bg-white/[0.04] border border-slate-100 dark:border-white/5">
+            <span className="text-slate-600 dark:text-slate-300 font-medium">{row.label}</span>
+            <div className="flex items-center gap-3">
+              <span className="text-slate-900 dark:text-white font-mono font-medium">{row.value}</span>
+              <span className={`w-2.5 h-2.5 rounded-full shadow-sm ${
+                row.status === 'normal' ? 'bg-emerald-400 dark:shadow-[0_0_10px_rgba(52,211,153,0.6)]' : row.status === 'high' ? 'bg-amber-400 dark:shadow-[0_0_10px_rgba(251,191,36,0.6)]' : 'bg-rose-400 animate-pulse dark:shadow-[0_0_15px_rgba(244,63,94,0.8)]'
               }`} />
             </div>
           </motion.div>
@@ -187,50 +206,51 @@ function ReportScanDemo() {
       <AnimatePresence>
         {phase >= 3 && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
-            className="mt-4 p-3 rounded-lg bg-brand/5 dark:bg-cyan-500/10 border border-brand/20 dark:border-cyan-500/20">
-            <div className="flex items-center gap-1.5 mb-1">
-              <RiBrainLine className="text-brand dark:text-cyan-400 text-sm" />
-              <span className="text-[10px] font-semibold text-brand dark:text-cyan-400 uppercase tracking-wider">AI Summary</span>
+            className="mt-6 p-5 rounded-xl bg-brand/5 dark:bg-cyan-500/10 border border-brand/10 dark:border-cyan-500/30 overflow-hidden shadow-inner dark:shadow-[inset_0_0_20px_rgba(34,211,238,0.1)]">
+            <div className="flex items-center gap-2 mb-3">
+              <RiBrainLine className="text-brand dark:text-cyan-400 text-lg dark:drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]" />
+              <span className="text-xs font-bold text-brand dark:text-cyan-400 tracking-wide uppercase">AI Summary & Recommendation</span>
             </div>
-            <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
               Elevated blood sugar (210 mg/dL) indicates hyperglycemia. WBC slightly above normal. 
-              Recommend: fasting glucose retest & HbA1c evaluation.
+              <br/><span className="text-slate-900 dark:text-white mt-2 block">Action: Schedule fasting glucose retest & HbA1c evaluation.</span>
             </p>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   )
 }
 
 /* ── Dashboard Preview ── */
 function DashboardPreview({ title, icon: Icon, role, gradient, items }) {
   return (
-    <GlassCard className="p-5 h-full" delay={0.1}>
-      <div className="flex items-center gap-3 mb-4">
-        <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${gradient}`}>
-          <Icon className="text-white text-lg" />
+    <PremiumCard className="p-6 flex flex-col h-full">
+      <div className="flex items-center gap-4 mb-6">
+        <div className={`w-12 h-12 rounded-[16px] flex items-center justify-center ${gradient} shadow-lg dark:shadow-[0_0_20px_rgba(0,0,0,0.5)] border border-white/20 dark:border-white/10`}>
+          <Icon className="text-white text-xl" />
         </div>
         <div>
-          <h4 className="text-sm font-semibold text-slate-800 dark:text-white">{title}</h4>
-          <p className="text-[10px] text-slate-400 uppercase tracking-wider">{role}</p>
+          <h4 className="text-base font-semibold text-slate-900 dark:text-white">{title}</h4>
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">{role}</p>
         </div>
       </div>
-      <div className="space-y-2">
+      <div className="space-y-2 mb-6 flex-1">
         {items.map((item, i) => (
-          <div key={i} className="flex items-center justify-between text-xs py-1.5 px-2 rounded-lg bg-slate-50/80 dark:bg-white/[0.03]">
-            <span className="text-slate-500 dark:text-slate-400">{item.label}</span>
-            <span className="text-slate-800 dark:text-white/80 font-mono text-[11px]">{item.value}</span>
+          <div key={i} className="flex items-center justify-between text-xs py-2.5 px-3 rounded-xl bg-slate-50/80 dark:bg-white/[0.04] border border-slate-100 dark:border-white/5">
+            <span className="text-slate-600 dark:text-slate-300 font-medium">{item.label}</span>
+            <span className="text-slate-900 dark:text-white font-mono font-medium">{item.value}</span>
           </div>
         ))}
       </div>
-      <div className="mt-3 flex justify-between items-end">
+      <div className="pt-4 border-t border-slate-100 dark:border-white/10 flex justify-between items-end">
         <MiniChart color={gradient.includes('cyan') ? '#22d3ee' : gradient.includes('indigo') ? '#818cf8' : gradient.includes('emerald') ? '#34d399' : '#f59e0b'} />
-        <span className="text-[10px] text-slate-400">Real-time</span>
+        <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold tracking-wide uppercase">Real-time</span>
       </div>
-    </GlassCard>
+    </PremiumCard>
   )
 }
+
 
 /* ═══════════════════════════════════════════
    MAIN LANDING PAGE
@@ -238,6 +258,19 @@ function DashboardPreview({ title, icon: Icon, role, gradient, items }) {
 export default function LandingPage() {
   const navigate = useNavigate()
   const { theme, toggleTheme } = useThemeStore()
+  
+  // Scroll parallax for backgrounds
+  const { scrollYProgress, scrollY } = useScroll()
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, 400])
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -400])
+  const heroOpacity = useTransform(scrollY, [0, 600], [1, 0])
+  const heroY = useTransform(scrollY, [0, 600], [0, 150])
+
+  // Navbar dynamic styling
+  const [scrolled, setScrolled] = useState(false)
+  useEffect(() => {
+    return scrollY.onChange(latest => setScrolled(latest > 50))
+  }, [scrollY])
 
   const FEATURES = [
     { icon: RiScanLine, title: 'AI Report Analysis', desc: 'Upload any medical report and our AI instantly extracts, categorizes, and analyzes every biomarker with clinical precision.', gradient: 'from-cyan-500 to-blue-600', chartColor: '#22d3ee' },
@@ -245,11 +278,11 @@ export default function LandingPage() {
     { icon: RiLineChartLine, title: 'Health Trend Analytics', desc: 'Track your biomarkers over time with intelligent trend analysis, predictive alerts, and personalized health scores.', gradient: 'from-emerald-500 to-cyan-600', chartColor: '#34d399' },
     { icon: RiChat3Line, title: 'AI Health Assistant', desc: 'Chat with an AI that understands your complete medical history, answers health questions, and provides evidence-based guidance.', gradient: 'from-violet-500 to-indigo-600', chartColor: '#a78bfa' },
     { icon: RiTeamLine, title: 'Doctor Collaboration', desc: 'Doctors review, verify, and annotate AI-analyzed reports. Seamless patient-doctor communication with real-time updates.', gradient: 'from-amber-500 to-orange-600', chartColor: '#fbbf24' },
-    { icon: RiDashboardLine, title: 'Smart Dashboard Intelligence', desc: 'Role-based dashboards for patients, doctors, and admins with real-time analytics and actionable insights.', gradient: 'from-rose-500 to-pink-600', chartColor: '#fb7185' },
+    { icon: RiDashboardLine, title: 'Smart Dashboards', desc: 'Role-based dashboards for patients, doctors, and admins with real-time analytics and actionable insights.', gradient: 'from-rose-500 to-pink-600', chartColor: '#fb7185' },
   ]
 
   const STATS = [
-    { value: 10000, suffix: '+', label: 'Reports Analyzed', icon: RiFileSearchLine },
+    { value: 1000, suffix: '+', label: 'Reports Analyzed', icon: RiFileSearchLine },
     { value: 98, suffix: '%', label: 'OCR Accuracy', icon: RiScanLine },
     { value: 500, suffix: '+', label: 'AI Diagnostics Daily', icon: RiBrainLine },
     { value: 24, suffix: '/7', label: 'Real-time Insights', icon: RiFlashlightLine },
@@ -263,131 +296,108 @@ export default function LandingPage() {
   ]
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#f5f7fb] dark:bg-[#030712]">
+    <div className="relative min-h-screen font-sans overflow-x-hidden bg-slate-50 dark:bg-black transition-colors duration-500 text-slate-600 dark:text-slate-300 selection:bg-brand/20 dark:selection:bg-cyan-500/30">
 
-      {/* ─── Background Layers ─── */}
+      {/* ─── Background System ─── */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Light mode: soft blue gradients */}
-        <div className="dark:hidden">
-          <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-brand/[0.06] blur-[120px]" />
-          <div className="absolute top-[35%] left-[-8%] w-[500px] h-[500px] rounded-full bg-cyan-400/[0.05] blur-[100px]" />
-          <div className="absolute bottom-[-5%] right-[20%] w-[400px] h-[400px] rounded-full bg-indigo-400/[0.04] blur-[90px]" />
-          <div className="absolute top-[60%] left-[40%] w-[300px] h-[300px] rounded-full bg-emerald-300/[0.03] blur-[80px]" />
-        </div>
-        {/* Dark mode: deep glows */}
-        <div className="hidden dark:block">
-          <div className="absolute top-[-15%] right-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-600/[0.08] blur-[120px]" />
-          <div className="absolute top-[35%] left-[-8%] w-[500px] h-[500px] rounded-full bg-cyan-500/[0.06] blur-[100px]" />
-          <div className="absolute bottom-[-10%] right-[15%] w-[400px] h-[400px] rounded-full bg-violet-600/[0.05] blur-[100px]" />
-        </div>
-        {/* Grid */}
-        <svg className="absolute inset-0 w-full h-full opacity-[0.04] dark:opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
+        {/* Animated Parallax Ambient Gradients (Hidden in Dark Mode for Pure Black) */}
+        <motion.div style={{ y: y1 }} className="absolute top-[-20%] right-[-10%] w-[1000px] h-[1000px] rounded-full bg-brand/[0.04] dark:hidden blur-[160px]" />
+        <motion.div style={{ y: y2 }} className="absolute top-[30%] left-[-10%] w-[800px] h-[800px] rounded-full bg-indigo-500/[0.03] dark:hidden blur-[140px]" />
+        <div className="absolute bottom-[-10%] right-[20%] w-[600px] h-[600px] rounded-full bg-brand/[0.02] dark:hidden blur-[120px]" />
+        
+        {/* Minimal Grid Pattern */}
+        <svg className="absolute inset-0 w-full h-full opacity-[0.03] dark:opacity-[0.02]" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <pattern id="hGrid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-slate-400 dark:text-slate-500" />
+            <pattern id="editorialGrid" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-slate-900 dark:text-white" />
             </pattern>
           </defs>
-          <rect width="100%" height="100%" fill="url(#hGrid)" />
+          <rect width="100%" height="100%" fill="url(#editorialGrid)" />
         </svg>
-
-        {/* Subtle EKG heartbeat pulse waves across the background */}
-        <svg className="absolute top-[18%] left-0 w-full h-[180px] opacity-[0.04] dark:opacity-[0.03] text-brand dark:text-cyan-400"
-          viewBox="0 0 1440 180" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <path d="M0,90 L300,90 L315,60 L330,120 L345,75 L360,95 L375,90 L750,90 L765,40 L780,140 L795,70 L810,105 L825,90 L1100,90 L1115,55 L1130,125 L1145,75 L1160,98 L1175,90 L1440,90"
-            stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        <svg className="absolute top-[55%] left-0 w-full h-[180px] opacity-[0.03] dark:opacity-[0.02] text-brand dark:text-cyan-400"
-          viewBox="0 0 1440 180" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <path d="M0,90 L150,90 L165,55 L180,125 L195,75 L210,98 L225,90 L600,90 L615,60 L630,120 L645,75 L660,95 L675,90 L1050,90 L1065,40 L1080,140 L1095,70 L1110,105 L1125,90 L1440,90"
-            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-
-        {/* Subtle watermark medical symbols */}
-        <div className="absolute top-[14%] left-[6%] text-[140px] opacity-[0.03] dark:opacity-[0.02] text-brand dark:text-cyan-400 select-none">
-          <RiHospitalLine />
-        </div>
-        <div className="absolute top-[48%] right-[4%] text-[200px] opacity-[0.025] dark:opacity-[0.015] text-brand dark:text-cyan-400 select-none animate-pulse" style={{ animationDuration: '4s' }}>
-          <RiHeartPulseLine />
-        </div>
-        <div className="absolute bottom-[8%] left-[7%] text-[130px] opacity-[0.03] dark:opacity-[0.02] text-brand dark:text-cyan-400 select-none">
-          <RiStethoscopeLine />
-        </div>
       </div>
 
-      {/* ─── NAVBAR ─── */}
-      <nav className="fixed top-0 left-0 right-0 z-50
-        bg-white/70 dark:bg-[#030712]/60
-        backdrop-blur-xl
-        border-b border-slate-200 dark:border-slate-800">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand to-indigo-600 flex items-center justify-center
-              shadow-md shadow-brand/20">
-              <RiHeartPulseLine className="text-white text-lg" />
-            </div>
-            <span className="text-lg font-bold text-slate-800 dark:text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+      {/* ─── FLOATING NAVBAR ─── */}
+      <motion.div 
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+        className={`fixed left-0 right-0 z-[100] flex justify-center px-4 md:px-6 pointer-events-none transition-all duration-500
+          ${scrolled ? 'top-4' : 'top-6 md:top-8'}`}>
+        <nav className={`w-full rounded-full flex items-center justify-between transition-all duration-500 pointer-events-auto
+          ${scrolled 
+            ? 'max-w-4xl h-14 px-5 bg-white/80 dark:bg-white/[0.02] backdrop-blur-2xl border border-slate-200/80 dark:border-white/10 shadow-lg dark:shadow-[0_10px_40px_rgba(0,0,0,0.5)]' 
+            : 'max-w-6xl h-20 px-8 bg-transparent border-transparent'}`}>
+          
+          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }} 
+              className={`flex items-center justify-center transition-all duration-500
+                ${scrolled ? 'w-8 h-8' : 'w-10 h-10'}`}>
+              <MedAssistIcon size={scrolled ? 32 : 40} uid="nav" />
+            </motion.div>
+            <span className={`font-bold text-slate-900 dark:text-white font-sora tracking-tight group-hover:opacity-80 transition-all duration-500
+              ${scrolled ? 'text-lg' : 'text-xl md:text-2xl'}`}>
               Med<span className="text-brand dark:text-cyan-400">Assist</span>
             </span>
           </div>
 
           <div className="hidden md:flex items-center gap-8">
-            {['Features', 'Analysis', 'Dashboards', 'Metrics'].map((item) => (
+            {['Features', 'Analysis', 'Dashboards'].map((item) => (
               <a key={item} href={`#${item.toLowerCase()}`}
-                className="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors duration-300">
+                className={`font-medium text-slate-600 hover:text-brand dark:text-slate-300 dark:hover:text-cyan-400 transition-colors relative group
+                  ${scrolled ? 'text-[13px]' : 'text-[15px]'}`}>
                 {item}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand dark:bg-cyan-400 transition-all duration-300 group-hover:w-full dark:shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
               </a>
             ))}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 md:gap-3">
             <button onClick={toggleTheme} title="Toggle Theme"
-              className="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white
-                hover:bg-slate-100 dark:hover:bg-white/10 transition-all">
-              {theme === 'dark' ? <RiSunLine className="text-lg" /> : <RiMoonLine className="text-lg" />}
+              className={`rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-white/10 transition-all duration-500
+                ${scrolled ? 'p-1.5' : 'p-2'}`}>
+              {theme === 'dark' ? <RiSunLine className={scrolled ? 'text-[16px]' : 'text-[20px]'} /> : <RiMoonLine className={scrolled ? 'text-[16px]' : 'text-[20px]'} />}
             </button>
             <button onClick={() => navigate('/login')}
-              className="text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors px-3 py-1.5">
+              className={`hidden sm:block font-semibold text-slate-700 dark:text-slate-300 hover:text-brand dark:hover:text-cyan-400 transition-all duration-500 px-2
+                ${scrolled ? 'text-[13px]' : 'text-[15px]'}`}>
               Sign In
             </button>
             <button onClick={() => navigate('/register')}
-              className="text-sm font-medium px-5 py-2 rounded-xl
-                bg-gradient-to-r from-brand to-indigo-500 dark:from-cyan-500 dark:to-indigo-500
-                text-white shadow-lg shadow-brand/25 dark:shadow-cyan-500/20
-                hover:shadow-xl hover:shadow-brand/30 dark:hover:shadow-cyan-500/30
-                hover:scale-[1.03] transition-all duration-300 active:scale-[0.97]">
+              className={`font-semibold rounded-full bg-slate-900 text-white dark:bg-cyan-400 dark:text-black hover:bg-slate-800 dark:hover:bg-cyan-300 dark:shadow-[0_0_20px_rgba(34,211,238,0.5)] transition-all duration-500 transform active:scale-95
+                ${scrolled ? 'text-[13px] px-4 py-2' : 'text-[15px] px-6 py-2.5'}`}>
               Get Started
             </button>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </motion.div>
 
       {/* ═══════════════════════════════════════
-         HERO SECTION
+         HERO SECTION (Editorial SaaS)
          ═══════════════════════════════════════ */}
-      <section className="relative z-20 pt-28 pb-8 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-10 items-center min-h-[520px]">
+      <section className="relative z-10 pt-40 pb-20 px-6 lg:min-h-[90vh] flex flex-col justify-center">
+        <motion.div style={{ opacity: heroOpacity, y: heroY }} className="max-w-7xl mx-auto w-full">
+          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
+            
             {/* ── Left: Copy ── */}
-            <div>
+            <div className="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left">
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium tracking-wide mb-6
-                  bg-brand/10 text-brand border border-brand/20
-                  dark:bg-cyan-500/10 dark:text-cyan-400 dark:border-cyan-500/20">
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-bold tracking-widest uppercase mb-8
+                  bg-brand/10 text-brand border border-brand/20 dark:bg-cyan-500/10 dark:text-cyan-400 dark:border-cyan-500/20 shadow-sm dark:shadow-[0_0_15px_rgba(34,211,238,0.15)]">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand dark:bg-cyan-400 animate-pulse" />
-                AI-Powered Healthcare Intelligence
+                Premium Healthcare AI
               </motion.span>
 
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="text-4xl md:text-5xl lg:text-[3.4rem] font-bold leading-[1.1] mb-6"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                className="font-sora text-4xl md:text-5xl lg:text-[4rem] font-bold leading-[1.1] mb-8 tracking-tight dark:drop-shadow-md">
                 <span className="text-slate-900 dark:text-white">Transform Medical Reports Into </span>
-                <span className="bg-gradient-to-r from-brand via-indigo-500 to-cyan-500 bg-clip-text text-transparent">
+                <br className="hidden lg:block" />
+                <span className="bg-gradient-to-r from-brand to-indigo-500 dark:from-cyan-400 dark:to-blue-500 bg-clip-text text-transparent dark:drop-shadow-[0_0_30px_rgba(34,211,238,0.3)]">
                   Intelligent Health Insights
                 </span>
               </motion.h1>
@@ -396,312 +406,301 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.25 }}
-                className="text-base md:text-lg text-slate-500 dark:text-slate-400 leading-relaxed mb-8 max-w-xl">
+                className="text-lg text-slate-500 dark:text-slate-300 leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0">
                 AI-powered report analysis, OCR extraction, smart health tracking,
-                and intelligent medical assistance — all in one platform.
+                and intelligent medical assistance — elegantly unified in one platform.
               </motion.p>
 
-              {/* CTA Buttons — premium style */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="flex flex-wrap gap-3">
+                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                 <button onClick={() => navigate('/register')}
-                  className="flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm
-                    bg-gradient-to-r from-brand to-indigo-500 dark:from-cyan-500 dark:to-indigo-500
-                    text-white
-                    shadow-[0_4px_25px_rgba(79,110,247,0.35)] dark:shadow-[0_4px_25px_rgba(34,211,238,0.3)]
-                    hover:shadow-[0_6px_35px_rgba(79,110,247,0.45)] dark:hover:shadow-[0_6px_35px_rgba(34,211,238,0.4)]
-                    hover:scale-[1.04] transition-all duration-300 active:scale-[0.97]">
-                  Get Started <RiArrowRightLine />
+                  className="w-full sm:w-auto flex justify-center items-center gap-2 px-8 py-4 rounded-[16px] font-semibold text-[15px]
+                    bg-gradient-to-r from-brand to-indigo-600 dark:from-cyan-400 dark:to-cyan-400 text-white dark:text-black relative overflow-hidden group
+                    shadow-[0_8px_30px_rgba(79,110,247,0.3)] dark:shadow-[0_0_30px_rgba(34,211,238,0.5)]
+                    hover:shadow-[0_12px_40px_rgba(79,110,247,0.4)] dark:hover:shadow-[0_0_40px_rgba(34,211,238,0.7)]
+                    hover:-translate-y-1 transition-all duration-300">
+                  <span className="absolute inset-0 w-full h-full bg-white/20 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500" />
+                  <span className="relative z-10 flex items-center gap-2">Get Started <RiArrowRightLine className="text-lg group-hover:translate-x-1 transition-transform" /></span>
                 </button>
                 <button onClick={() => navigate('/register')}
-                  className="flex items-center gap-2 px-6 py-3.5 rounded-xl font-medium text-sm
-                    border border-slate-200/80 dark:border-white/10
-                    text-slate-700 dark:text-white/90
-                    bg-white/60 dark:bg-white/[0.04] backdrop-blur-sm
-                    hover:bg-white dark:hover:bg-white/[0.08]
-                    hover:border-brand/30 dark:hover:border-cyan-400/20
-                    hover:shadow-lg hover:shadow-brand/5 dark:hover:shadow-cyan-500/5
-                    transition-all duration-300 active:scale-[0.97]">
-                  <RiUploadCloud2Line /> Upload Report
-                </button>
-                <button className="flex items-center gap-2 px-5 py-3.5 rounded-xl font-medium text-sm
-                    text-slate-400 hover:text-brand dark:hover:text-cyan-400 transition-all duration-300">
-                  <RiPlayCircleLine className="text-lg" /> Watch Demo
+                  className="w-full sm:w-auto flex justify-center items-center gap-2 px-7 py-4 rounded-[16px] font-semibold text-[15px]
+                    border border-slate-200 dark:border-white/10
+                    text-slate-700 dark:text-white
+                    bg-white/50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 backdrop-blur-sm
+                    hover:border-brand/30 dark:hover:border-cyan-400/50 hover:shadow-sm dark:hover:shadow-[0_0_20px_rgba(34,211,238,0.15)]
+                    transition-all duration-300 hover:-translate-y-1 group">
+                  <RiUploadCloud2Line className="text-lg group-hover:-translate-y-1 transition-transform" /> Upload Report
                 </button>
               </motion.div>
 
-              {/* Trusted by */}
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
-                className="mt-10 flex items-center gap-5">
-                <span className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">Trusted by</span>
-                <div className="flex items-center gap-2">
-                  {['AIIMS', 'Apollo', 'Fortis', 'Max Health'].map((n) => (
-                    <span key={n} className="text-[11px] font-medium text-slate-400 dark:text-slate-600 px-3 py-1.5 rounded-lg
-                      bg-white/60 dark:bg-white/[0.03] border border-slate-200/60 dark:border-white/[0.05] backdrop-blur-sm">
-                      {n}
-                    </span>
-                  ))}
+                className="mt-14 flex flex-col items-center lg:items-start gap-4">
+                <span className="text-[11px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-widest">Trusted by medical leaders</span>
+                <div className="flex items-center gap-6 opacity-60 hover:opacity-100 transition-all duration-500 text-slate-600 dark:text-slate-400">
+                  <div className="font-sora font-bold text-xl cursor-pointer hover:text-brand dark:hover:text-cyan-400 transition-colors dark:drop-shadow-sm">AIIMS</div>
+                  <div className="font-sora font-bold text-xl tracking-tighter cursor-pointer hover:text-brand dark:hover:text-cyan-400 transition-colors dark:drop-shadow-sm">APOLLO</div>
+                  <div className="font-sora font-bold text-xl cursor-pointer hover:text-brand dark:hover:text-cyan-400 transition-colors dark:drop-shadow-sm">FORTIS</div>
                 </div>
               </motion.div>
             </div>
 
-            {/* ── Right: Layered Hero Composition ── */}
-            <div className="hidden lg:block">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="relative flex items-center justify-center min-h-[480px]"
-              >
-                {/* Layer 1: Large glow circle */}
-                <div className="absolute w-[380px] h-[380px] rounded-full
-                  bg-gradient-to-br from-brand/10 via-cyan-400/5 to-indigo-500/10
-                  dark:from-cyan-400/15 dark:via-indigo-500/10 dark:to-brand/15
-                  blur-3xl" />
+            {/* ── Right: Embedded Showcase ── */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.9, delay: 0.3 }}
+              className="relative mt-12 lg:mt-0 max-w-[500px] lg:max-w-none mx-auto w-full flex justify-center items-center"
+            >
+              {/* Soft ambient glow behind the raw illustration */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-brand/10 dark:bg-cyan-400/20 rounded-full blur-[100px] pointer-events-none" />
 
-                {/* Layer 2: Secondary breathing glow */}
-                <motion.div
-                  animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.8, 0.5] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute w-[300px] h-[300px] rounded-full
-                    bg-brand/[0.06] dark:bg-cyan-500/[0.08] blur-[60px]" />
+              {/* Main Illustration */}
+              <motion.img
+                animate={{ y: [0, -12, 0] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+                src="/hero-doctor.svg"
+                alt="Healthcare Illustration"
+                className="relative z-10 w-[95%] h-auto object-contain drop-shadow-xl dark:drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+              />
+            </motion.div>
 
-                {/* Layer 3: Interactive Zdog Illustration */}
-                <div className="relative z-10">
-                  <HealthcareIllo width={420} height={420} />
-                </div>
-              </motion.div>
-            </div>
           </div>
+        </motion.div>
+      </section>
+
+      {/* ─── STATS STRIP ─── */}
+      <section className="relative z-10 py-12 px-6">
+        <div className="max-w-6xl mx-auto">
+          <PremiumCard className="p-8 rounded-[32px]">
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true }} className="grid grid-cols-2 md:grid-cols-4 gap-8 md:divide-x divide-slate-200 dark:divide-white/10">
+              {STATS.map((stat, i) => (
+                <motion.div key={i} variants={fadeUp} className="text-center px-4">
+                  <div className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-2 font-sora tracking-tight dark:drop-shadow-sm">
+                    <AnimCounter end={stat.value} suffix={stat.suffix} />
+                  </div>
+                  <div className="flex items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">
+                    <stat.icon className="text-brand dark:text-cyan-400 text-lg dark:drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]" />
+                    {stat.label}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </PremiumCard>
         </div>
       </section>
 
-      {/* ─── Floating Stats Strip ─── */}
-      <section className="relative z-20 py-6 px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="rounded-2xl border p-6
-              bg-white/60 dark:bg-white/[0.03] backdrop-blur-xl
-              border-slate-200/60 dark:border-white/[0.06]
-              shadow-lg shadow-black/[0.03] dark:shadow-black/20"
-          >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {STATS.map((stat, i) => (
-                <motion.div key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="text-center">
-                  <stat.icon className="text-2xl text-brand dark:text-cyan-400 mx-auto mb-2" />
-                  <div className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-0.5"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                    <AnimCounter end={stat.value} suffix={stat.suffix} />
+      {/* ─── FEATURES ─── */}
+      <section id="features" className="relative z-10 py-24 px-6 scroll-mt-36">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader tag="Core Platform"
+            title="Intelligent Healthcare Modules"
+            desc="Enterprise-grade tools working seamlessly to analyze, extract, and monitor medical data." />
+          
+          <motion.div variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FEATURES.map((f, i) => (
+              <motion.div key={i} variants={fadeUp} className="h-full">
+                <PremiumCard className="p-8 flex flex-col h-full cursor-pointer">
+                  <motion.div whileHover={{ scale: 1.1, rotate: 5 }} className={`w-14 h-14 rounded-[16px] bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-6 shadow-md dark:shadow-[0_10px_20px_rgba(0,0,0,0.4)] border border-white/10`}>
+                    <f.icon className="text-white text-2xl drop-shadow-sm" />
+                  </motion.div>
+                  <h3 className="font-sora text-xl font-semibold text-slate-900 dark:text-white mb-3 group-hover:text-brand dark:group-hover:text-cyan-400 transition-colors dark:drop-shadow-sm">{f.title}</h3>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-6 flex-1">{f.desc}</p>
+                  <div className="pt-5 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between mt-auto">
+                    <MiniChart color={f.chartColor} bars={6} />
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 flex items-center gap-1 group-hover:text-brand dark:group-hover:text-cyan-400 transition-colors">
+                      Explore <motion.span whileHover={{ x: 3 }}><RiArrowRightLine /></motion.span>
+                    </span>
                   </div>
-                  <p className="text-xs text-slate-400">{stat.label}</p>
-                </motion.div>
-              ))}
-            </div>
+                </PremiumCard>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Scroll indicator */}
-      <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }}
-        className="flex justify-center py-6 relative z-20">
-        <RiArrowDownLine className="text-slate-300 dark:text-slate-600 text-xl" />
-      </motion.div>
-
-      {/* ─── FEATURES ─── */}
-      <section id="features" className="relative z-20 py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <SectionHeader tag="Platform Features"
-            title="Everything You Need for Intelligent Healthcare"
-            desc="Six powerful modules working together to revolutionize how medical data is processed, analyzed, and acted upon." />
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {FEATURES.map((f, i) => (
-              <GlassCard key={i} className="p-6" delay={i * 0.08}>
-                <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-4
-                  shadow-lg shadow-black/10`}>
-                  <f.icon className="text-white text-xl" />
-                </div>
-                <h3 className="text-base font-semibold text-slate-800 dark:text-white mb-2">{f.title}</h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
-                <div className="mt-4 flex items-center justify-between">
-                  <MiniChart color={f.chartColor} bars={6} />
-                  <span className="text-xs text-slate-400 flex items-center gap-1 group-hover:text-brand dark:group-hover:text-cyan-400 transition-colors">
-                    Learn more <RiArrowRightLine />
-                  </span>
-                </div>
-              </GlassCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ─── AI REPORT ANALYSIS DEMO ─── */}
-      <section id="analysis" className="relative z-20 py-20 px-6">
+      <section id="analysis" className="relative z-10 py-24 px-6 scroll-mt-36">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <SectionHeader tag="Live AI Demo" title="See AI Analysis in Action"
-                desc="Watch how MedAssist processes a real blood report — from upload to intelligent diagnosis in seconds." />
-              <div className="space-y-4 mt-2">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
+            <div className="order-2 lg:order-1">
+              <SectionHeader tag="Live Analysis" title="Instant Medical Report Extraction"
+                desc="Watch MedAssist process a standard blood report, extracting biomarkers and identifying anomalies in seconds." align="left" />
+              
+              <motion.div variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true }} className="space-y-6 mt-8">
                 {[
-                  { icon: RiUploadCloud2Line, label: 'Upload any medical report (PDF, image, or scan)' },
-                  { icon: RiScanLine, label: 'AI extracts values using advanced OCR technology' },
-                  { icon: RiFlashlightLine, label: 'Abnormal values flagged with clinical context' },
-                  { icon: RiBrainLine, label: 'AI generates personalized summary & recommendations' },
+                  { icon: RiUploadCloud2Line, title: 'Secure Upload', desc: 'Accepts PDF, image, or scanned documents' },
+                  { icon: RiScanLine, title: 'OCR Processing', desc: 'Extracts values with 98%+ clinical accuracy' },
+                  { icon: RiFlashlightLine, title: 'Anomaly Detection', desc: 'Flags critical values instantly' },
+                  { icon: RiBrainLine, title: 'AI Recommendation', desc: 'Generates personalized health steps' },
                 ].map((s, i) => (
-                  <motion.div key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 rounded-lg bg-brand/10 dark:bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
-                      <s.icon className="text-brand dark:text-cyan-400" />
+                  <motion.div key={i} variants={fadeLeft}
+                    className="flex gap-5 p-5 rounded-[24px] hover:bg-slate-100/50 dark:hover:bg-white/[0.03] transition-colors border border-transparent hover:border-slate-200 dark:hover:border-white/10 hover:shadow-sm dark:hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)] cursor-pointer group">
+                    <motion.div whileHover={{ scale: 1.1 }} className="w-14 h-14 rounded-[16px] bg-white dark:bg-white/5 border border-slate-200/80 dark:border-white/10 shadow-sm dark:shadow-[0_5px_15px_rgba(0,0,0,0.5)] flex items-center justify-center flex-shrink-0 dark:group-hover:border-cyan-500/30 transition-colors">
+                      <s.icon className="text-brand dark:text-cyan-400 text-2xl group-hover:scale-110 transition-transform dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" />
+                    </motion.div>
+                    <div>
+                      <h4 className="text-base font-semibold text-slate-900 dark:text-white mb-1.5 font-sora group-hover:text-brand dark:group-hover:text-cyan-400 transition-colors">{s.title}</h4>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{s.desc}</p>
                     </div>
-                    <span className="text-slate-600 dark:text-slate-300">{s.label}</span>
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
-            <ReportScanDemo />
+            <div className="order-1 lg:order-2">
+              <ReportScanDemo />
+            </div>
           </div>
         </div>
       </section>
 
       {/* ─── MULTI-ROLE DASHBOARDS ─── */}
-      <section id="dashboards" className="relative z-20 py-20 px-6">
+      <section id="dashboards" className="relative z-10 py-24 px-6 scroll-mt-36">
         <div className="max-w-7xl mx-auto">
-          <SectionHeader tag="Multi-Role Dashboards" title="One Platform, Every Perspective"
-            desc="Tailored dashboards for patients, doctors, administrators, and lab technicians." />
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {DASHBOARDS.map((d, i) => <DashboardPreview key={i} {...d} />)}
-          </div>
+          <SectionHeader tag="Unified Access" title="Role-Based Intelligence Dashboards"
+            desc="Secure, tailored environments designed specifically for patients, doctors, lab technicians, and hospital administrators." />
+          <motion.div variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-50px' }} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {DASHBOARDS.map((d, i) => (
+              <motion.div key={i} variants={fadeUp} className="h-full">
+                <DashboardPreview {...d} />
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
       {/* ─── HOW IT WORKS ─── */}
-      <section className="relative z-20 py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <SectionHeader tag="How It Works" title="From Upload to Insight in 3 Steps" />
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { step: '01', icon: RiUploadCloud2Line, title: 'Upload Report', desc: 'Upload any medical report — PDF, image, or scanned document. Our OCR handles the rest.' },
-              { step: '02', icon: RiBrainLine, title: 'AI Analyzes', desc: 'Our AI engine processes, extracts, categorizes and identifies anomalies with clinical precision.' },
-              { step: '03', icon: RiCheckDoubleLine, title: 'Get Insights', desc: 'Receive AI-generated summaries, health scores, trend analysis, and actionable recommendations.' },
-            ].map((item, i) => (
-              <GlassCard key={i} className="p-6 text-center" delay={i * 0.15}>
-                <span className="text-4xl font-bold bg-gradient-to-b from-slate-200 dark:from-white/20 to-slate-100 dark:to-white/5 bg-clip-text text-transparent mb-4 block"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                  {item.step}
-                </span>
-                <div className="w-12 h-12 rounded-2xl bg-brand/10 dark:bg-brand/20 border border-brand/10 dark:border-white/[0.08] flex items-center justify-center mx-auto mb-4">
-                  <item.icon className="text-brand dark:text-cyan-400 text-xl" />
-                </div>
-                <h4 className="text-base font-semibold text-slate-800 dark:text-white mb-2">{item.title}</h4>
-                <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{item.desc}</p>
-              </GlassCard>
-            ))}
+      <section className="relative z-10 py-24 px-6 scroll-mt-36">
+        <div className="max-w-6xl mx-auto">
+          <SectionHeader tag="Workflow" title="From Upload to Insight in 3 Steps" />
+          
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center mt-16">
+            {/* Left: Illustration */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="relative flex justify-center max-w-[500px] mx-auto lg:max-w-none w-full"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-brand/10 to-indigo-500/10 dark:from-cyan-500/20 dark:to-indigo-500/20 rounded-full blur-[100px] w-[80%] h-[80%] m-auto pointer-events-none" />
+              <motion.img 
+                animate={{ y: [0, -10, 0] }} transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                src="/how-it-works.svg" 
+                alt="Process illustration" 
+                className="relative z-10 w-full drop-shadow-lg dark:drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)]"
+              />
+            </motion.div>
+
+            {/* Right: 3 Cards Stacked */}
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="show" viewport={{ once: true }} className="flex flex-col gap-6">
+              {[
+                { step: '01', icon: RiUploadCloud2Line, title: 'Upload Report', desc: 'Securely upload your medical report. Our OCR handles printed and handwritten text.' },
+                { step: '02', icon: RiBrainLine, title: 'AI Analyzes', desc: 'The AI engine processes, extracts, and categorizes biomarkers with clinical precision.' },
+                { step: '03', icon: RiCheckDoubleLine, title: 'Get Insights', desc: 'Receive visual summaries, health scores, and actionable medical recommendations.' },
+              ].map((item, i) => (
+                <motion.div key={i} variants={fadeUp}>
+                  <PremiumCard className="p-6 md:p-8 flex flex-col sm:flex-row items-start gap-6 relative overflow-hidden">
+                    <span className="absolute -right-4 -bottom-6 text-[140px] font-bold font-sora text-slate-100 dark:text-white/[0.03] pointer-events-none select-none leading-none z-0 transition-transform duration-500 group-hover:scale-110 group-hover:text-brand/5 dark:group-hover:text-cyan-500/5">
+                      {item.step}
+                    </span>
+                    
+                    <div className="w-16 h-16 rounded-[20px] bg-slate-50 dark:bg-white/[0.03] border border-slate-200/50 dark:border-white/10 shadow-inner dark:shadow-[0_10px_20px_rgba(0,0,0,0.4)] flex items-center justify-center flex-shrink-0 relative z-10 group-hover:bg-brand dark:group-hover:bg-cyan-500 dark:group-hover:border-cyan-400 dark:group-hover:shadow-[0_0_25px_rgba(34,211,238,0.6)] transition-all duration-500">
+                      <item.icon className="text-brand dark:text-cyan-400 text-3xl group-hover:text-white transition-colors duration-500 dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.5)] group-hover:drop-shadow-none" />
+                    </div>
+                    
+                    <div className="relative z-10 pt-2">
+                      <h4 className="text-xl font-bold font-sora text-slate-900 dark:text-white mb-3 group-hover:text-brand dark:group-hover:text-cyan-400 transition-colors">{item.title}</h4>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-[280px]">{item.desc}</p>
+                    </div>
+                  </PremiumCard>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* ─── CTA ─── */}
-      <section className="relative z-20 py-20 px-6">
-        <div className="max-w-4xl mx-auto">
-          <GlassCard className="p-10 md:p-14 text-center overflow-hidden" hover={false}>
-            {/* Accent glow */}
-            <div className="absolute inset-0 rounded-2xl
-              bg-gradient-to-br from-brand/[0.04] to-cyan-500/[0.03]
-              dark:from-cyan-500/[0.06] dark:to-indigo-500/[0.04] pointer-events-none" />
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[60%] h-px
-              bg-gradient-to-r from-transparent via-brand/30 dark:via-cyan-400/30 to-transparent" />
+      <section className="relative z-10 py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          {/* We keep CTA naturally dark in both modes for SaaS impact */}
+          <div className="relative rounded-[40px] md:rounded-[60px] p-12 md:p-24 text-center overflow-hidden
+            bg-slate-900 dark:bg-white/[0.03] backdrop-blur-2xl border border-slate-800 dark:border-white/10 shadow-[0_20px_80px_rgba(0,0,0,0.8)] group hover:shadow-[0_20px_100px_rgba(34,211,238,0.15)] hover:border-brand/30 dark:hover:border-cyan-500/30 transition-all duration-700">
+            
+            {/* Glowing Accent Layers */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-[2px] bg-gradient-to-r from-transparent via-brand dark:via-cyan-400 to-transparent opacity-80 group-hover:opacity-100 group-hover:w-[90%] transition-all duration-700 shadow-[0_0_30px_rgba(79,110,247,0.8)] dark:shadow-[0_0_30px_rgba(34,211,238,1)]" />
+            <motion.div animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-brand/30 dark:bg-cyan-500/20 blur-[120px] pointer-events-none" />
 
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} className="relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand to-indigo-600 dark:from-cyan-500 dark:to-indigo-500 flex items-center justify-center mx-auto mb-6
-                shadow-lg shadow-brand/25 dark:shadow-cyan-500/25">
-                <RiRobot2Line className="text-white text-2xl" />
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                Ready to Experience the Future of Healthcare?
+              <motion.div whileHover={{ rotate: 15, scale: 1.1 }} className="w-20 h-20 rounded-[24px] bg-gradient-to-br from-brand to-indigo-600 dark:from-cyan-500 dark:to-blue-600 flex items-center justify-center mx-auto mb-8
+                shadow-[0_15px_40px_rgba(79,110,247,0.4)] dark:shadow-[0_15px_40px_rgba(34,211,238,0.5)] ring-4 ring-brand/20 dark:ring-cyan-500/20 cursor-pointer transition-transform border border-white/20">
+                <RiRobot2Line className="text-white text-4xl drop-shadow-md" />
+              </motion.div>
+              <h2 className="font-sora text-4xl md:text-5xl font-bold text-white mb-6 leading-tight tracking-tight drop-shadow-md">
+                Ready to Experience the <br className="hidden md:block" />Future of Healthcare?
               </h2>
-              <p className="text-slate-500 dark:text-slate-400 text-base mb-8 max-w-2xl mx-auto">
-                Join thousands of patients and healthcare providers already using MedAssist
-                to transform medical reports into actionable health intelligence.
+              <p className="text-slate-300 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
+                Join premium medical institutions and proactive patients globally using MedAssist
+                to transform raw medical data into actionable health intelligence.
               </p>
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <button onClick={() => navigate('/register')}
-                  className="flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-sm
-                    bg-gradient-to-r from-brand to-indigo-500 dark:from-cyan-500 dark:to-indigo-500
-                    text-white
-                    shadow-[0_4px_25px_rgba(79,110,247,0.35)] dark:shadow-[0_4px_25px_rgba(34,211,238,0.3)]
-                    hover:shadow-[0_6px_35px_rgba(79,110,247,0.45)] dark:hover:shadow-[0_6px_35px_rgba(34,211,238,0.4)]
-                    hover:scale-[1.04] transition-all duration-300 active:scale-[0.98]">
-                  Start Free Today <RiArrowRightLine />
+                  className="px-10 py-5 rounded-[16px] font-bold text-slate-900 bg-white dark:bg-cyan-400 dark:text-black shadow-[0_0_30px_rgba(255,255,255,0.4)] dark:shadow-[0_0_30px_rgba(34,211,238,0.5)] hover:shadow-[0_0_40px_rgba(255,255,255,0.6)] dark:hover:shadow-[0_0_40px_rgba(34,211,238,0.7)] hover:-translate-y-1 hover:scale-105 transition-all duration-300">
+                  Deploy MedAssist Today
                 </button>
                 <button onClick={() => navigate('/login')}
-                  className="flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-sm
-                    border border-slate-200/80 dark:border-white/10
-                    text-slate-700 dark:text-white/90
-                    bg-white/60 dark:bg-white/[0.04] backdrop-blur-sm
-                    hover:bg-white dark:hover:bg-white/[0.08] transition-all duration-300">
-                  Sign In
+                  className="px-10 py-5 rounded-[16px] font-semibold text-white border border-slate-600 dark:border-cyan-500/50 dark:text-cyan-400 hover:bg-white/10 dark:hover:bg-cyan-500/10 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1">
+                  Talk to Sales
                 </button>
               </div>
             </motion.div>
-          </GlassCard>
+          </div>
         </div>
       </section>
 
       {/* ─── FOOTER ─── */}
-      <footer className="relative z-20 border-t border-slate-200 dark:border-white/[0.05] py-12 px-6
-        bg-white/40 dark:bg-transparent backdrop-blur-sm">
+      <footer className="relative z-10 border-t border-slate-200 dark:border-white/5 py-16 px-6 bg-white dark:bg-transparent">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2.5 mb-4">
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand to-indigo-600 flex items-center justify-center shadow-md shadow-brand/15">
-                  <RiHeartPulseLine className="text-white text-sm" />
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12 mb-16">
+            <div className="col-span-2">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 flex items-center justify-center">
+                  <MedAssistIcon size={40} uid="footer" />
                 </div>
-                <span className="text-base font-bold text-slate-800 dark:text-white" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                <span className="text-2xl font-bold font-sora text-slate-900 dark:text-white tracking-tight">
                   Med<span className="text-brand dark:text-cyan-400">Assist</span>
                 </span>
               </div>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                AI-powered healthcare intelligence platform transforming medical data into actionable health insights.
+              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm">
+                Enterprise AI healthcare platform transforming medical data into actionable insights for patients and doctors.
               </p>
             </div>
             {[
-              { title: 'Product', links: ['Features', 'AI Analysis', 'Dashboard', 'Pricing'] },
-              { title: 'Company', links: ['About', 'Blog', 'Careers', 'Contact'] },
-              { title: 'Legal', links: ['Privacy', 'Terms', 'HIPAA', 'Security'] },
+              { title: 'Platform', links: ['Features', 'AI Engine', 'Dashboards', 'Security'] },
+              { title: 'Company', links: ['About Us', 'Careers', 'Press', 'Contact'] },
+              { title: 'Legal', links: ['Privacy Policy', 'Terms of Service', 'HIPAA Compliance', 'Cookie Policy'] },
             ].map((col) => (
               <div key={col.title}>
-                <h4 className="text-xs font-semibold text-slate-800 dark:text-white uppercase tracking-wider mb-3">{col.title}</h4>
-                <ul className="space-y-2">
+                <h4 className="text-sm font-bold font-sora text-slate-900 dark:text-white mb-5 uppercase tracking-wider">{col.title}</h4>
+                <ul className="space-y-3">
                   {col.links.map((link) => (
                     <li key={link}>
-                      <a href="#" className="text-xs text-slate-500 hover:text-brand dark:hover:text-cyan-400 transition-colors">{link}</a>
+                      <a href="#" className="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-brand dark:hover:text-cyan-400 transition-colors inline-block hover:translate-x-1 duration-200">{link}</a>
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
-          <div className="border-t border-slate-200/60 dark:border-white/[0.05] pt-6 flex flex-col md:flex-row items-center justify-between gap-2">
-            <p className="text-[11px] text-slate-400">© 2025 MedAssist. All rights reserved.</p>
-            <p className="text-[11px] text-slate-400">Built with AI for the future of healthcare.</p>
+          <div className="border-t border-slate-200 dark:border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-xs font-medium text-slate-400 dark:text-slate-500">© 2026 MedAssist Healthcare. All rights reserved.</p>
+            <div className="flex gap-4 text-slate-400 dark:text-slate-500">
+              <span className="text-xs font-medium uppercase tracking-widest hover:text-brand dark:hover:text-cyan-400 transition-colors cursor-pointer">Built with AI</span>
+            </div>
           </div>
         </div>
       </footer>

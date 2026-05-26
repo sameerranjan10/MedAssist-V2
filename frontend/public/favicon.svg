@@ -1,6 +1,64 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="8" fill="#4f6ef7"/>
-  <path d="M6 16 Q8 10 11 16 Q14 22 17 16 Q20 10 23 16 Q25 20 26 16"
-        stroke="white" stroke-width="2.5" fill="none"
-        stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ma-fav-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0038C0" />
+      <stop offset="50%" stop-color="#0063FF" />
+      <stop offset="100%" stop-color="#00B4DC" />
+    </linearGradient>
+
+    <linearGradient id="ma-fav-chest" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0048D0" />
+      <stop offset="100%" stop-color="#0090C8" />
+    </linearGradient>
+
+    <radialGradient id="ma-fav-iglow" cx="40%" cy="28%" r="72%">
+      <stop offset="0%" stop-color="#80C8FF" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#0038C0" stop-opacity="0" />
+    </radialGradient>
+
+    <clipPath id="ma-fav-clip">
+      <rect x="0" y="0" width="200" height="200" rx="100" />
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="200" height="200" rx="100" fill="url(#ma-fav-bg)" />
+
+  <g clip-path="url(#ma-fav-clip)">
+    <!-- Glow -->
+    <rect x="0" y="0" width="200" height="200" fill="url(#ma-fav-iglow)" />
+
+    <!-- Glass Effect -->
+    <ellipse cx="78" cy="60" rx="75" ry="50" fill="white" fill-opacity="0.08" transform="rotate(-18 78 60)" />
+
+    <!-- Dark Depth -->
+    <ellipse cx="155" cy="158" rx="70" ry="55" fill="#001060" fill-opacity="0.15" />
+
+    <!-- Medical Symbol -->
+    <g>
+      <!-- Cross Vertical -->
+      <rect x="86" y="40" width="28" height="90" rx="8" fill="white" />
+
+      <!-- Cross Horizontal -->
+      <rect x="38" y="84" width="124" height="28" rx="8" fill="white" />
+
+      <!-- ECG Line -->
+      <path d="M38,98 L60,98 L68.5,87 L76,110 L83.5,98 L162,98" stroke="#0060D8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+
+      <!-- Connector -->
+      <rect x="90" y="125" width="20" height="16" fill="white" />
+
+      <!-- Stethoscope Outer -->
+      <circle cx="100" cy="153" r="17" fill="white" />
+
+      <!-- Inner Gradient -->
+      <circle cx="100" cy="153" r="10.5" fill="url(#ma-fav-chest)" />
+
+      <!-- Center Dot -->
+      <circle cx="100" cy="153" r="4.5" fill="white" />
+    </g>
+
+    <!-- Border Highlight -->
+    <rect x="1.5" y="1.5" width="197" height="197" rx="98.5" fill="none" stroke="white" stroke-width="2" stroke-opacity="0.2" />
+  </g>
 </svg>
