@@ -18,7 +18,7 @@ import useThemeStore from '@/store/themeStore'
 import toast from 'react-hot-toast'
 import MedAssistIcon from '@/components/MedAssistIcon'
 
-const NAV_ITEMS = {
+export const NAV_ITEMS = {
   patient: [
     { label: 'Dashboard',      icon: RiDashboardLine,  to: '/dashboard' },
     { label: 'My Reports',     icon: RiFileList3Line,   to: '/reports' },
@@ -70,7 +70,7 @@ export default function Sidebar({ role, isOpen, onClose }) {
 
   return (
     <aside
-      className={`fixed md:static top-0 left-0 h-full w-[190px] z-50 flex-shrink-0 flex flex-col overflow-y-auto transition-transform duration-300 bg-[#14114a] ${
+      className={`hidden md:flex fixed md:static top-0 left-0 h-full w-[190px] z-50 flex-shrink-0 flex-col overflow-y-auto transition-transform duration-300 bg-[#14114a] ${
         isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
       }`}
     >

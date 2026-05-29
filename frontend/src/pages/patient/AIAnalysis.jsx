@@ -5,19 +5,17 @@
  */
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 import {
   RiArrowLeftLine, RiDownloadLine, RiFileTextLine,
   RiCheckboxCircleLine, RiAlertLine, RiLightbulbLine,
-  RiStethoscopeLine, RiLoader4Line,
+  RiStethoscopeLine,
 } from 'react-icons/ri'
 import { reportsAPI } from '@/api/services'
 import { StatusBadge, LoadingSpinner, EmptyState } from '@/components/common'
-import toast from 'react-hot-toast'
+
 
 const TABS = ['Summary', 'Parameters', 'AI Explanation', 'Doctor Verification']
-const STATUS_COLORS = { normal: '#22c55e', low: '#ef4444', high: '#f59e0b', critical: '#dc2626' }
 const OVERALL_COLORS = { normal: '#22c55e', mild_abnormal: '#f59e0b', abnormal: '#ef4444', critical: '#dc2626' }
 
 export default function AIAnalysis() {
@@ -54,7 +52,7 @@ export default function AIAnalysis() {
   if (!analysis) return <div className="p-6"><LoadingSpinner text="Analysis in progress…" /></div>
 
   const params = analysis.extracted_params || {}
-  const paramList = Object.values(params)
+  const paramList = Object.entries(params).map(([label, data]) => ({ label, ...data }))
   const normalCount = paramList.filter(p => p.status === 'normal').length
   const abnormalCount = paramList.length - normalCount
 

@@ -7,9 +7,14 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint src --ext .jsx,.js"
+    "lint": "eslint src --ext .jsx,.js",
+    "build:android": "npm run build && npx cap sync android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.3.4",
+    "@capacitor/core": "^8.3.4",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-tooltip": "^1.2.8",
     "@react-oauth/google": "^0.13.5",
     "axios": "^1.16.1",
     "clsx": "^2.1.1",
@@ -22,10 +27,12 @@
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.23.1",
     "recharts": "^2.12.7",
+    "tailwind-merge": "^3.6.0",
     "zdog": "^1.1.3",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.3.4",
     "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
@@ -33,6 +40,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.4",
-    "vite": "^5.2.12"
+    "vite": "^5.2.12",
+    "vite-plugin-pwa": "^1.3.0"
   }
 }
