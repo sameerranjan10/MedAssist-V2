@@ -20,6 +20,11 @@ export const dashboardAPI = {
   stats: () => api.get('/api/dashboard/stats'),
 }
 
+// ── Trends ────────────────────────────────────────────────────────────────────
+export const trendsAPI = {
+  get: () => api.get('/api/trends'),
+}
+
 // ── Reports ───────────────────────────────────────────────────────────────────
 export const reportsAPI = {
   upload:      (formData)   => api.post('/api/reports/upload', formData, {

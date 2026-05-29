@@ -229,3 +229,20 @@ class DashboardStatsOut(BaseModel):
     upcoming_appointments: List[AppointmentOut]
     health_trends: List[TrendData]
     ai_tip: str
+
+
+# ── Trends ────────────────────────────────────────────────────────────────────
+
+class TrendPoint(BaseModel):
+    date: str    # ISO date string e.g. "2026-01-15"
+    value: float
+
+
+class HealthTrendsOut(BaseModel):
+    health_score: List[TrendPoint]
+    parameters: Dict[str, List[TrendPoint]]   # param_name → list of {date, value}
+    parameter_units: Dict[str, str]           # param_name → unit string
+    total_reports: int
+    latest_score: Optional[int] = None
+    score_change: Optional[int] = None        # latest minus earliest health score
+

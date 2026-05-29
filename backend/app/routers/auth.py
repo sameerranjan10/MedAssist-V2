@@ -8,6 +8,7 @@ from typing import Optional
 from pydantic import BaseModel
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
+from datetime import datetime
 
 from app.core.config import settings
 from app.core.database import get_db
@@ -199,6 +200,12 @@ class PatientProfileOut(BaseModel):
     blood_group: Optional[str] = None
     phone: Optional[str] = None
     address: Optional[str] = None
+    height: Optional[str] = None
+    weight: Optional[str] = None
+    bmi: Optional[str] = None
+    allergies: Optional[str] = None
+    emergency_contact: Optional[str] = None
+    primary_physician: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -219,6 +226,7 @@ class ProfileResponse(BaseModel):
     email: str
     full_name: str
     role: str
+    created_at: datetime
     patient_profile: Optional[PatientProfileOut] = None
     doctor_profile: Optional[DoctorProfileOut] = None
 
@@ -234,6 +242,12 @@ class ProfileUpdateRequest(BaseModel):
     blood_group: Optional[str] = None
     phone: Optional[str] = None
     address: Optional[str] = None
+    height: Optional[str] = None
+    weight: Optional[str] = None
+    bmi: Optional[str] = None
+    allergies: Optional[str] = None
+    emergency_contact: Optional[str] = None
+    primary_physician: Optional[str] = None
     # Doctor fields
     specialization: Optional[str] = None
     license_number: Optional[str] = None
@@ -267,6 +281,18 @@ def update_profile(body: ProfileUpdateRequest, current_user=Depends(get_current_
             profile.phone = body.phone
         if body.address is not None:
             profile.address = body.address
+        if body.height is not None:
+            profile.height = body.height
+        if body.weight is not None:
+            profile.weight = body.weight
+        if body.bmi is not None:
+            profile.bmi = body.bmi
+        if body.allergies is not None:
+            profile.allergies = body.allergies
+        if body.emergency_contact is not None:
+            profile.emergency_contact = body.emergency_contact
+        if body.primary_physician is not None:
+            profile.primary_physician = body.primary_physician
 
     elif current_user.role == "doctor":
         profile = db.query(Doctor).filter(Doctor.user_id == current_user.id).first()

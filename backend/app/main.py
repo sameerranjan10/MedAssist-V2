@@ -12,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
 from app.core.database import Base, engine
-from app.routers import auth, reports, chatbot, doctor, admin, dashboard
+from app.routers import auth, reports, chatbot, doctor, admin, dashboard, trends
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -49,6 +49,7 @@ def create_app() -> FastAPI:
     app.include_router(doctor.router)
     app.include_router(admin.router)
     app.include_router(dashboard.router)
+    app.include_router(trends.router)
 
     # Serve uploaded files (dev only — use S3/CDN in production)
     uploads_dir = Path(settings.UPLOAD_DIR)

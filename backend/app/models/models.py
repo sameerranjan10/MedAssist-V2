@@ -67,6 +67,14 @@ class Patient(Base):
     address     = Column(Text)
     medical_history = Column(Text)  # stored as JSON string
 
+    # Medical information fields
+    height           = Column(String(20))   # e.g. "175 cm"
+    weight           = Column(String(20))   # e.g. "70 kg"
+    bmi              = Column(String(10))   # e.g. "22.9"
+    allergies        = Column(Text)         # free text
+    emergency_contact = Column(String(255)) # name + phone
+    primary_physician = Column(String(255)) # doctor name
+
     user    = relationship("User", back_populates="patient_profile")
     reports = relationship("Report", back_populates="patient")
     appointments = relationship("Appointment", back_populates="patient")
